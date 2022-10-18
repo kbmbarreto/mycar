@@ -1,0 +1,22 @@
+pipeline {
+agent any
+
+options {
+timeout(time: 80, unit: 'MINUTES')
+}
+
+stages {
+
+stage('Clear project') {
+steps {
+sh "mvn test"
+}
+}
+
+stage('Run jUnit tests') {
+steps {
+sh "mvn test"
+}
+}
+}
+}
