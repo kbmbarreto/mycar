@@ -10,15 +10,16 @@ pipeline {
             stage ('Compile project') {
                 steps {
                     withMaven(maven: 'Maven3') {
-                        sh 'mvn clean install'
+                        sh ' mvn -f pom.xml clean install'
+                            sh 'mvn clean install'
                     }
                 }
         }
 
-        stage('Clear project') {
+        stage('Clean project') {
             steps {
                 withMaven(maven: 'Maven3') {
-                    sh "mvn test"
+                    sh "mvn clean"
                 }
             }
         }
