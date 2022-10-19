@@ -12,4 +12,16 @@ class MycarApplicationTests {
         assertEquals(4, result);
     }
 
+    @Test
+    void testOperation2() {
+        int result = 2 + 2;
+        assertEquals(4, result);
+    }
+
+    @Test
+    void testOperatio3() {
+        int result = 2 + 2;
+        assertEquals(4, result);
+    }
+
 }
