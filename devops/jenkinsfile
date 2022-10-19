@@ -7,21 +7,20 @@ pipeline {
 
         stages {
 
+            stage('Clean old files') {
+                steps {
+                    withMaven(maven: 'Maven3') {
+                        sh "mvn clean"
+                }
+            }
+        }
+
             stage ('Compile project') {
                 steps {
                     withMaven(maven: 'Maven3') {
                         sh ' mvn -f pom.xml clean install'
-                            sh 'mvn clean install'
                     }
                 }
-        }
-
-        stage('Clean project') {
-            steps {
-                withMaven(maven: 'Maven3') {
-                    sh "mvn clean"
-                }
-            }
         }
 
         stage('Run jUnit tests') {
