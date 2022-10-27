@@ -17,7 +17,7 @@ public class User implements Serializable {
     @Column(name = "Email", length = 60, columnDefinition = "VARCHAR(60)", nullable = false)
     private String Email;
 
-    @Column(name = "Password", length = 255, columnDefinition = "VARCHAR(255)", nullable = false)
+    @Column(name = "Password", columnDefinition = "VARCHAR(255)", nullable = false)
     private String Password;
 
     public Long getId() {
