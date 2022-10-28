@@ -12,7 +12,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 
 <groupId>com.lambdateam</groupId>
     <artifactId>mycar</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
     <name>mycar</name>
 <description>Sistema para controle de manutenção de veículos</description>
 

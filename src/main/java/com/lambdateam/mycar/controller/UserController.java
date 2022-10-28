@@ -18,7 +18,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<UserModel> init(@PathVariable (value = "id") Long id) {
+    public ResponseEntity<UserModel> getUserById(@PathVariable (value = "id") Long id) {
 
         Optional<UserModel> userModel = userRepository.findById(id);
 
@@ -26,18 +26,43 @@ public class UserController {
     }
 
     @GetMapping(value = "/", produces = "application/json")
-    public ResponseEntity<List<UserModel>> user() {
+    public ResponseEntity<List<UserModel>> listAllUsers() {
 
         List<UserModel> list = (List<UserModel>) userRepository.findAll();
 
         return new ResponseEntity<List<UserModel>>(list, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/")
-    public ResponseEntity<UserModel> newUser(@RequestBody UserModel userModel) {
+    @PostMapping(value = "/", produces = "application/json")
+    public ResponseEntity<UserModel> createUser(@RequestBody UserModel userModel) {
 
         UserModel userSaved = userRepository.save(userModel);
 
         return new ResponseEntity<UserModel>(userSaved, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<UserModel> fullUpdateUser(@RequestBody UserModel userModel) {
+
+        UserModel userSaved = userRepository.save(userModel);
+
+        return new ResponseEntity<UserModel>(userSaved, HttpStatus.OK);
+    }
+
+    //@PatchMapping("/drivers/{id}")
+    //public Driver incrementalUpdateDriver(@PathVariable("id") Long id
+    //, @RequestBody Driver driver) {
+    //Driver foundDriver = findDriver(id);
+    //foundDriver.setBirthDate(Optional.ofNullable(driver.getBirthDa
+    //te()).orElse(foundDriver.getBirthDate()));
+    //foundDriver.setName(Optional.ofNullable(driver.getName()).orEl
+    //se(foundDriver.getName()));
+
+    @DeleteMapping(value = "/{id}", produces = "application/text")
+    public String deleteUser(@PathVariable("id") Long id) {
+
+        userRepository.deleteById(id);
+
+        return "Successfully deleted";
     }
 }

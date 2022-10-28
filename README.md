@@ -51,6 +51,10 @@ Para rodar os testes unitários, utilize o seguinte comando: `mvn test`
 ## Execução de testes unitários com o Jenkins
 Neste projeto, no diretório devops, existe um arquivo jenkinsfile que contém  toda a configuração necessária para rodar uma esteira de testes unitários automatizados no Jenkins. 
 
+## Compilando o projeto e gerando um .jar
+
+Para gerar um arquivo java executável, utilize o seguinte comando: `mvn package`
+
 ## Tutoriais úteis para configurar sua estação de trabalho.
 
 - [Configurar variáveis de ambiente JAVA](https://mauriciogeneroso.medium.com/configurando-java-4-como-configurar-as-vari%C3%A1veis-java-home-path-e-classpath-no-windows-46040950638f)

@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+agent any
 
         options {
             timeout(time: 80, unit: 'MINUTES')
@@ -23,12 +23,20 @@ pipeline {
                 }
         }
 
-        stage('Run jUnit tests') {
-            steps {
-                withMaven(maven: 'Maven3') {
-                    sh "mvn test"
+            stage('Run jUnit tests') {
+                steps {
+                    withMaven(maven: 'Maven3') {
+                        sh "mvn test"
+                    }
+                }
+            }
+
+            stage('Build and generate .jar') {
+                steps {
+                    withMaven(maven: 'Maven3') {
+                        sh "mvn package"
+                    }
                 }
             }
         }
-    }
 }
