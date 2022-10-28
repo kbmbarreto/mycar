@@ -14,6 +14,7 @@
 - Oracle MySQL
 - JUnit 5
 - Swagger 2
+- Jenkins
 
 ## Preparação do ambiente
 Para rodar o projeto, utlize a IDE que você mais se identifique **(no meu caso, utilizo o IntelliJ)**, em seguida, altere o arquivo **application.properties** para que o projeto se adeque ao seu servidor de **banco de dados**:
@@ -41,6 +42,12 @@ spring.mvc.pathmatch.matching-strategy=ant_path_matcher
 ````
 
 Em seguida, basta criar um banco de dados no MySql com o comando `Create schema {nomeDoBancoDeDados}`
+
+## Execução de testes unitários
+Para rodar os testes unitários, utilize o seguinte comando: `mvn test`
+
+## Execução de testes unitários com o Jenkins
+Neste projeto, no diretório devops, existe um arquivo jenkinsfile que contém  toda a configuração necessária para rodar uma esteira de testes unitários automatizados no Jenkins. 
 
 ## Tutoriais úteis para configurar sua estação de trabalho.
 
