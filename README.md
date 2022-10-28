@@ -44,6 +44,8 @@ spring.mvc.pathmatch.matching-strategy=ant_path_matcher
 Em seguida, basta criar um banco de dados no MySql com o comando `Create schema {nomeDoBancoDeDados}`
 
 ## Execução de testes unitários
+
+Para limpar os resultados de testes anteriores, utilize o comando: `mvn clean`
 Para rodar os testes unitários, utilize o seguinte comando: `mvn test`
 
 ## Execução de testes unitários com o Jenkins
