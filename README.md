@@ -13,6 +13,7 @@
 - Spring Security
 - Oracle MySQL
 - JUnit 5
+- Rest Assured
 - Swagger 2
 - Jenkins
 
