@@ -53,6 +53,7 @@ public class UserController {
     public UserModel incrementalUpdateUser(@PathVariable("id") Long id, @RequestBody UserModel userModel) {
 
         UserModel foundUser = getUserById(id).getBody();
+        assert foundUser != null;
         foundUser.setEmail(Optional.ofNullable(userModel.getEmail()).orElse(foundUser.getEmail()));
         foundUser.setUserName(Optional.ofNullable(userModel.getUserName()).orElse(foundUser.getUserName()));
         foundUser.setPassword(Optional.ofNullable(userModel.getPassword()).orElse(foundUser.getPassword()));
