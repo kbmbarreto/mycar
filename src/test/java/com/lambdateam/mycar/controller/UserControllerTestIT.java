@@ -29,7 +29,7 @@ public class UserControllerTestIT {
         given()
                 .contentType(ContentType.JSON)
                 .body(createUserJSON)
-                .post("/user")
+                .post("/user/")
                 .then()
                 .statusCode(201)
                 .body("id", notNullValue())
