@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,14 +50,16 @@ public class UserController {
         return new ResponseEntity<UserModel>(userSaved, HttpStatus.OK);
     }
 
-    //@PatchMapping("/drivers/{id}")
-    //public Driver incrementalUpdateDriver(@PathVariable("id") Long id
-    //, @RequestBody Driver driver) {
-    //Driver foundDriver = findDriver(id);
-    //foundDriver.setBirthDate(Optional.ofNullable(driver.getBirthDa
-    //te()).orElse(foundDriver.getBirthDate()));
-    //foundDriver.setName(Optional.ofNullable(driver.getName()).orEl
-    //se(foundDriver.getName()));
+    @PatchMapping(value = "/{id}", produces = "application/json")
+    public UserModel incrementalUpdateUser(@PathVariable("id") Long id, @RequestBody UserModel userModel) {
+
+        UserModel foundUser = getUserById(id).getBody();
+        foundUser.setEmail(Optional.ofNullable(userModel.getEmail()).orElse(foundUser.getEmail()));
+        foundUser.setUserName(Optional.ofNullable(userModel.getUserName()).orElse(foundUser.getUserName()));
+        foundUser.setPassword(Optional.ofNullable(userModel.getPassword()).orElse(foundUser.getPassword()));
+
+        return userRepository.save(foundUser);
+    }
 
     @DeleteMapping(value = "/{id}", produces = "application/text")
     public String deleteUser(@PathVariable("id") Long id) {
