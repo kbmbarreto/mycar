@@ -1,32 +1,35 @@
 package com.lambdateam.mycar.model;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ManufacturerModelTest {
 
-    @Test
-    void getId() {
+    private ManufacturerModel manufacturerModel;
+
+    @Before
+    public void setUp() throws Exception {
+        manufacturerModel = new ManufacturerModel( 1L, "Honda");
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        System.out.print("Test completed");
     }
 
     @Test
-    void setId() {
+    void getManufacturerTest() throws Exception {
+        setUp();
+        assertEquals(1L, manufacturerModel.getId());
+        assertEquals("Honda", manufacturerModel.getManufacturer());
     }
 
     @Test
-    void getManufacturer() {
-    }
-
-    @Test
-    void setManufacturer() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void testHashCode() {
+    void ManufacturerHashCodeTest() {
+        ManufacturerModel x = new ManufacturerModel(1L, "Honda");
+        assertEquals(x, x);
     }
 }
