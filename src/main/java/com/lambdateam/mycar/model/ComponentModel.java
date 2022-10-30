@@ -17,6 +17,15 @@ public class ComponentModel implements Serializable {
     @Column(name = "component", length = 75, columnDefinition = "VARCHAR(75)", nullable = false)
     private String component;
 
+    public ComponentModel() {
+
+    }
+
+    public ComponentModel(long id, String component) {
+        this.id = id;
+        this.component = component;
+    }
+
     public long getId() {
         return id;
     }

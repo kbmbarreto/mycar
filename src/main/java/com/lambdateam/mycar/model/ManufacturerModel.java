@@ -17,6 +17,15 @@ public class ManufacturerModel implements Serializable {
     @Column(name = "manufacturer", length = 45, columnDefinition = "VARCHAR(45)", nullable = false)
     private String manufacturer;
 
+    public ManufacturerModel() {
+
+    }
+
+    public ManufacturerModel(long id, String manufacturer) {
+        this.id = id;
+        this.manufacturer = manufacturer;
+    }
+
     public long getId() {
         return id;
     }

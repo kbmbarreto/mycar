@@ -22,6 +22,17 @@ public class UserModel implements Serializable {
     @Column(name = "password", columnDefinition = "VARCHAR(255)", nullable = false)
     private String password;
 
+    public UserModel() {
+
+    }
+
+    public UserModel(Long id, String username, String email, String password) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }
