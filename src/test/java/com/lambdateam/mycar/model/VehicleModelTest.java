@@ -24,7 +24,7 @@ class VehicleModelTest {
     void getVehicleTest() throws Exception {
         setUp();
         assertEquals(1L, vehicleModel.getId());
-        assertEquals("Honda Civic LX 1998", vehicleModel.getDescricao());
+        assertEquals("Honda Civic LX 1998", vehicleModel.getDescription());
     }
 
     @Test

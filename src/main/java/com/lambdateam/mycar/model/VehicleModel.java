@@ -14,16 +14,16 @@ public class VehicleModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long id;
 
-    @Column(name = "descricao", length = 45, columnDefinition = "VARCHAR(45)", nullable = false)
-    private String descricao;
+    @Column(name = "description", length = 45, columnDefinition = "VARCHAR(45)", nullable = false)
+    private String description;
 
     public VehicleModel() {
 
     }
 
-    public VehicleModel(long id, String descricao) {
+    public VehicleModel(long id, String description) {
         this.id = id;
-        this.descricao = descricao;
+        this.description = description;
     }
 
     public long getId() {
@@ -34,12 +34,12 @@ public class VehicleModel implements Serializable {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -47,11 +47,11 @@ public class VehicleModel implements Serializable {
         if (this == o) return true;
         if (!(o instanceof VehicleModel)) return false;
         VehicleModel that = (VehicleModel) o;
-        return getId() == that.getId() && getDescricao().equals(that.getDescricao());
+        return getId() == that.getId() && getDescription().equals(that.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDescricao());
+        return Objects.hash(getId(), getDescription());
     }
 }
