@@ -12,7 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTestIT {
+public class ServiceControllerTestIT {
 
     @LocalServerPort
     private int port;
@@ -23,18 +23,25 @@ public class UserControllerTestIT {
     }
 
     @Test
-    public void testCreateUser() {
-        String createUserJSON = "{\"email\":\"teste@teste.com\";\"username\":\"kleber.barreto\";\"password\":\"Teste@123\"}";
+    public void testCreateService() {
+        String createServiceJSON = "{" +
+                "\"scheduling\":\"2022-01-01\";" +
+                "\"description\":\"Troca de óleo\";" +
+                "\"orderService\":\"dropbox.com/os001.pdf\";" +
+                "\"idVehicle\":\"1\";" +
+                "\"idWorkshop\":\"1\"}";
 
         given()
                 .contentType(ContentType.JSON)
-                .body(createUserJSON)
-                .post("/user/")
+                .body(createServiceJSON)
+                .post("/service/")
                 .then()
                 .statusCode(201)
                 .body("id", notNullValue())
-                .body("username", equalTo("kleber.barreto"))
-                .body("email", equalTo("teste@teste.com"))
-                .body("password", equalTo("Teste@123"));
+                .body("scheduling", equalTo("2022-01-01"))
+                .body("description", equalTo("Troca de óleo"))
+                .body("orderService", equalTo("dropbox.com/os001.pdf"))
+                .body("idVehicle", equalTo("1"))
+                .body("idWorkshop", equalTo("1"));
     }
 }
