@@ -1,6 +1,6 @@
 package com.lambdateam.mycar.model;
 
-public enum MaintenceTypeModel {
+public enum MaintenanceTypeModel {
 
     PREVENTIVE,
     CORRECTIVE,
