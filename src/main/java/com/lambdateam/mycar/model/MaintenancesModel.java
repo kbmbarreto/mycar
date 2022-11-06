@@ -29,31 +29,29 @@ public class MaintenancesModel implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_manufacturer")
-    private ManufacturerModel idManufacturer;
+    private ManufacturerModel manufacturer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehicle")
-    private VehicleModel idVehicle;
+    private VehicleModel vehicle;
 
     @Column(name = "maintenance_type")
     @Enumerated(value = EnumType.STRING)
-    private MaintenanceTypeModel maintenanceTypeModel;
+    private MaintenanceTypeModel maintenanceType;
 
     public MaintenancesModel() {
 
     }
 
-    public MaintenancesModel(long id, double km, Date maintenanceDate, double nextKm, double amount,
-                             ManufacturerModel idManufacturer, VehicleModel idVehicle,
-                             MaintenanceTypeModel maintenanceTypeModel) {
+    public MaintenancesModel(long id, double km, Date maintenanceDate, double nextKm, double amount, ManufacturerModel manufacturer, VehicleModel vehicle, MaintenanceTypeModel maintenanceType) {
         this.id = id;
         this.km = km;
         this.maintenanceDate = maintenanceDate;
         this.nextKm = nextKm;
         this.amount = amount;
-        this.idManufacturer = idManufacturer;
-        this.idVehicle = idVehicle;
-        this.maintenanceTypeModel = maintenanceTypeModel;
+        this.manufacturer = manufacturer;
+        this.vehicle = vehicle;
+        this.maintenanceType = maintenanceType;
     }
 
     public long getId() {
@@ -96,28 +94,28 @@ public class MaintenancesModel implements Serializable {
         this.amount = amount;
     }
 
-    public ManufacturerModel getIdManufacturer() {
-        return idManufacturer;
+    public ManufacturerModel getManufacturer() {
+        return manufacturer;
     }
 
-    public void setIdManufacturer(ManufacturerModel idManufacturer) {
-        this.idManufacturer = idManufacturer;
+    public void setManufacturer(ManufacturerModel manufacturer) {
+        this.manufacturer = manufacturer;
     }
 
-    public VehicleModel getIdVehicle() {
-        return idVehicle;
+    public VehicleModel getVehicle() {
+        return vehicle;
     }
 
-    public void setIdVehicle(VehicleModel idVehicle) {
-        this.idVehicle = idVehicle;
+    public void setVehicle(VehicleModel vehicle) {
+        this.vehicle = vehicle;
     }
 
-    public MaintenanceTypeModel getMaintenanceTypeModel() {
-        return maintenanceTypeModel;
+    public MaintenanceTypeModel getMaintenanceType() {
+        return maintenanceType;
     }
 
-    public void setMaintenanceTypeModel(MaintenanceTypeModel maintenanceTypeModel) {
-        this.maintenanceTypeModel = maintenanceTypeModel;
+    public void setMaintenanceType(MaintenanceTypeModel maintenanceType) {
+        this.maintenanceType = maintenanceType;
     }
 
     @Override
@@ -125,11 +123,11 @@ public class MaintenancesModel implements Serializable {
         if (this == o) return true;
         if (!(o instanceof MaintenancesModel)) return false;
         MaintenancesModel that = (MaintenancesModel) o;
-        return getId() == that.getId() && Double.compare(that.getKm(), getKm()) == 0 && Double.compare(that.getNextKm(), getNextKm()) == 0 && Double.compare(that.getAmount(), getAmount()) == 0 && getMaintenanceDate().equals(that.getMaintenanceDate()) && getIdManufacturer().equals(that.getIdManufacturer()) && getIdVehicle().equals(that.getIdVehicle()) && getMaintenanceTypeModel() == that.getMaintenanceTypeModel();
+        return getId() == that.getId() && Double.compare(that.getKm(), getKm()) == 0 && Double.compare(that.getNextKm(), getNextKm()) == 0 && Double.compare(that.getAmount(), getAmount()) == 0 && getMaintenanceDate().equals(that.getMaintenanceDate()) && getManufacturer().equals(that.getManufacturer()) && getVehicle().equals(that.getVehicle()) && getMaintenanceType() == that.getMaintenanceType();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getKm(), getMaintenanceDate(), getNextKm(), getAmount(), getIdManufacturer(), getIdVehicle(), getMaintenanceTypeModel());
+        return Objects.hash(getId(), getKm(), getMaintenanceDate(), getNextKm(), getAmount(), getManufacturer(), getVehicle(), getMaintenanceType());
     }
 }

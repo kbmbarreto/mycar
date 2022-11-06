@@ -55,10 +55,10 @@ public class MaintenancesController {
         MaintenancesModel foundMaintenance = getMaintenanceById(id).getBody();
         assert foundMaintenance != null;
         foundMaintenance.setMaintenanceDate(Optional.ofNullable(maintenancesModel.getMaintenanceDate()).orElse(foundMaintenance.getMaintenanceDate()));
-        foundMaintenance.setIdVehicle(Optional.ofNullable(maintenancesModel.getIdVehicle()).orElse(foundMaintenance.getIdVehicle()));
+        foundMaintenance.setVehicle(Optional.ofNullable(maintenancesModel.getVehicle()).orElse(foundMaintenance.getVehicle()));
         foundMaintenance.setAmount(Optional.ofNullable(maintenancesModel.getAmount()).orElse(foundMaintenance.getAmount()));
-        foundMaintenance.setMaintenanceTypeModel(Optional.ofNullable(maintenancesModel.getMaintenanceTypeModel()).orElse(foundMaintenance.getMaintenanceTypeModel()));
-        foundMaintenance.setIdManufacturer(Optional.ofNullable(maintenancesModel.getIdManufacturer()).orElse(foundMaintenance.getIdManufacturer()));
+        foundMaintenance.setMaintenanceType(Optional.ofNullable(maintenancesModel.getMaintenanceType()).orElse(foundMaintenance.getMaintenanceType()));
+        foundMaintenance.setManufacturer(Optional.ofNullable(maintenancesModel.getManufacturer()).orElse(foundMaintenance.getManufacturer()));
         foundMaintenance.setNextKm(Optional.ofNullable(maintenancesModel.getNextKm()).orElse(foundMaintenance.getNextKm()));
 
         return maintenancesRepository.save(foundMaintenance);

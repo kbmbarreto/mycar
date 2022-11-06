@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,8 +59,8 @@ public class ServiceController {
         foundService.setScheduling(Optional.ofNullable(serviceModel.getScheduling()).orElse(foundService.getScheduling()));
         foundService.setDescription(Optional.ofNullable(serviceModel.getDescription()).orElse(foundService.getDescription()));
         foundService.setOrderService(Optional.ofNullable(serviceModel.getOrderService()).orElse(foundService.getOrderService()));
-        foundService.setIdVehicle(Optional.ofNullable(serviceModel.getIdVehicle()).orElse(foundService.getIdVehicle()));
-        foundService.setIdWorkshop(Optional.ofNullable(serviceModel.getIdWorkshop()).orElse(foundService.getIdWorkshop()));
+        foundService.setVehicle(Optional.ofNullable(serviceModel.getVehicle()).orElse(foundService.getVehicle()));
+        foundService.setWorkshop(Optional.ofNullable(serviceModel.getWorkshop()).orElse(foundService.getWorkshop()));
 
         return serviceRepository.save(foundService);
     }

@@ -26,23 +26,23 @@ public class ServiceModel implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehicle")
-    private VehicleModel idVehicle;
+    private VehicleModel vehicle;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_workshop")
-    private WorkshopModel idWorkshop;
+    private WorkshopModel workshop;
 
     public ServiceModel() {
 
     }
 
-    public ServiceModel(long id, Date scheduling, String description, String orderService, VehicleModel idVehicle, WorkshopModel idWorkshop) {
+    public ServiceModel(long id, Date scheduling, String description, String orderService, VehicleModel vehicle, WorkshopModel workshop) {
         this.id = id;
         this.scheduling = scheduling;
         this.description = description;
         this.orderService = orderService;
-        this.idVehicle = idVehicle;
-        this.idWorkshop = idWorkshop;
+        this.vehicle = vehicle;
+        this.workshop = workshop;
     }
 
     public long getId() {
@@ -77,20 +77,20 @@ public class ServiceModel implements Serializable {
         this.orderService = orderService;
     }
 
-    public VehicleModel getIdVehicle() {
-        return idVehicle;
+    public VehicleModel getVehicle() {
+        return vehicle;
     }
 
-    public void setIdVehicle(VehicleModel idVehicle) {
-        this.idVehicle = idVehicle;
+    public void setVehicle(VehicleModel vehicle) {
+        this.vehicle = vehicle;
     }
 
-    public WorkshopModel getIdWorkshop() {
-        return idWorkshop;
+    public WorkshopModel getWorkshop() {
+        return workshop;
     }
 
-    public void setIdWorkshop(WorkshopModel idWorkshop) {
-        this.idWorkshop = idWorkshop;
+    public void setWorkshop(WorkshopModel workshop) {
+        this.workshop = workshop;
     }
 
     @Override
@@ -98,11 +98,11 @@ public class ServiceModel implements Serializable {
         if (this == o) return true;
         if (!(o instanceof ServiceModel)) return false;
         ServiceModel that = (ServiceModel) o;
-        return getId() == that.getId() && getScheduling().equals(that.getScheduling()) && getDescription().equals(that.getDescription()) && Objects.equals(getOrderService(), that.getOrderService()) && Objects.equals(getIdVehicle(), that.getIdVehicle()) && Objects.equals(getIdWorkshop(), that.getIdWorkshop());
+        return getId() == that.getId() && getScheduling().equals(that.getScheduling()) && getDescription().equals(that.getDescription()) && Objects.equals(getOrderService(), that.getOrderService()) && getVehicle().equals(that.getVehicle()) && getWorkshop().equals(that.getWorkshop());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getScheduling(), getDescription(), getOrderService(), getIdVehicle(), getIdWorkshop());
+        return Objects.hash(getId(), getScheduling(), getDescription(), getOrderService(), getVehicle(), getWorkshop());
     }
 }
