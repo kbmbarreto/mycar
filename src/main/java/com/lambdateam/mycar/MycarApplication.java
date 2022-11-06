@@ -7,6 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
@@ -17,7 +19,7 @@ import java.util.TimeZone;
 @EnableJpaRepositories(basePackages = {"com.lambdateam.mycar.repository"})
 @EnableTransactionManagement
 @RestController
-public class MycarApplication {
+public class MycarApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MycarApplication.class, args);
@@ -26,5 +28,10 @@ public class MycarApplication {
     @PostConstruct
     public void init() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC -3:00"));
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedMethods("*").allowedOrigins("*");
     }
 }
