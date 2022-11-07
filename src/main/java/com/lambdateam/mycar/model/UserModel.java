@@ -1,11 +1,15 @@
 package com.lambdateam.mycar.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "User")
-public class UserModel implements Serializable {
+public class UserModel implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,6 +25,14 @@ public class UserModel implements Serializable {
 
     @Column(name = "password", columnDefinition = "VARCHAR(255)", nullable = false)
     private String password;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "Users_role", uniqueConstraints = @UniqueConstraint( columnNames = {"user_id", "role_id"}, name = "unique_role_user"),
+    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", table = "User", unique = false,
+            foreignKey = @ForeignKey(name = "user_fk", value = ConstraintMode.CONSTRAINT)),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id", table = "Role", unique = false, updatable = false,
+                    foreignKey = @ForeignKey(name = "role_fk", value = ConstraintMode.CONSTRAINT)))
+    private List<Role> roles;
 
     public UserModel() {
 
@@ -87,6 +99,36 @@ public class UserModel implements Serializable {
                 return false;
         } else if(!id.equals(other.id))
             return false;
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
         return true;
     }
 }
