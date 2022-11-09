@@ -1,6 +1,6 @@
 # MyCar
 
-<p>API para controle da manutenção de veículos.</p>
+<p>API para controle da manutenção veicular.</p>
 
 ## Ferramentas utilizadas
 
