@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
+/** PRIMEIRO PASSO PARA IMPLANTAR O SPRING SECURITY -> Criar as tabelas a classe de Roles e associar com Users **/
+
 @Entity
 @Table(name = "Role")
 @SequenceGenerator(name = "seq_role", sequenceName = "seq_role", allocationSize = 1, initialValue = 1)

@@ -32,6 +32,8 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                 /** Mapeia URL de Logout e invalida o usuário **/
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
+        /** QUARTO PASSO PARA IMPLANTAR O SPRING SECURITY -> Criar as configurações acima **/
+
                 /** Filtra reuisições de login para autenticação **/
 
                 /** Filtra demais requisições para verificar a presença do token JWT no header http **/

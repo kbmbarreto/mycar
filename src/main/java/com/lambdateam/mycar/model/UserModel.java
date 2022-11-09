@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
+/** SEGUNDO PASSO PARA IMPLANTAR O SPRING SECURITY -> Fazer os JoinTable e implementar os Override de User Details **/
+
 @Entity
 @Table(name = "User")
 public class UserModel implements UserDetails {
