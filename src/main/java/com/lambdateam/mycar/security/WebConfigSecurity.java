@@ -1,6 +1,7 @@
 package com.lambdateam.mycar.security;
 
 import com.lambdateam.mycar.service.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 /** Mapeia URL, endereços, autoriza ou bloqueia acessos a URL **/
 public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     /** Configura as solicitações de acesso por http **/

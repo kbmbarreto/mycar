@@ -18,7 +18,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 <description>Sistema para controle de manutenção veicular</description>
 
 <properties>
-    <java.version>11</java.version>
+    <java.version>1.8</java.version>
 </properties>
 
 <dependencies>
@@ -28,23 +28,29 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
+        <version>2.7.0</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
+        <version>2.7.0</version>
         <scope>test</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-web -->
     <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-web</artifactId>
         <version>5.7.5</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-config -->
     <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-config</artifactId>
@@ -81,6 +87,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         <version>4.1.2</version>
         <scope>test</scope>
     </dependency>
+
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>

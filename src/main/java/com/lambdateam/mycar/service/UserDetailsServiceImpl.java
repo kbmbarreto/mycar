@@ -7,9 +7,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 /** TERCEIRO PASSO PARA IMPLANTAR O SPRING SECURITY -> Criar o serviço para carregar o usuário **/
 
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired

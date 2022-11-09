@@ -11,21 +11,29 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/** SÉTIMO PASSO PARA IMPLANTAR O SPRING SECURITY -> Criar as configurações abaixo **/
-
-/** Filtro onde todas as requisições serão capturadas para autenticar **/
+/**
+ * Sétimo PASSO PARA IMPLANTAR O SPRING SECURITY -> Criar as configurações abaixo
+ *
+ * <p>Filtro onde todas as requisições serão capturadas para autenticar
+ */
 public class JWTApiAuthFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        /** Estabelece a autenticação para a requisição **/
+        /**
+         * Estabelece a autenticação para a requisição
+         */
         Authentication authentication = new JWTTokenAuthService().getAuthentication((HttpServletRequest) servletRequest);
 
-        /** Coloca o processo de autenticação no Spring Security **/
+        /**
+         * Coloca o processo de autenticação no Spring Security
+         */
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        /** Continua o processo **/
+        /**
+         * Continua o processo
+         */
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

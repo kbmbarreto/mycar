@@ -15,9 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/** SEXTO PASSO PARA IMPLANTAR O SPRING SECURITY -> Criar as configurações abaixo **/
-
-/** Estabelece nosso gerenciador de token **/
+/**
+ * Sexto passo para implantar o Spring Security -> Criar as configurações abaixo
+ * <p></p>
+ * Estabelece nosso gerenciador de token
+ */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     protected JWTLoginFilter(String url, AuthenticationManager authenticationManager) {
@@ -29,15 +31,21 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         setAuthenticationManager(authenticationManager);
     }
 
-    /** Retorna o usuário ao processar a autenticação **/
+    /**
+     * Retorna o usuário ao processar a autenticação
+     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
-        /** Recebendo o token para validar **/
+        /**
+         * Recebendo o token para validar
+         */
         UserModel userModel = new ObjectMapper()
                 .readValue(request.getInputStream(), UserModel.class);
 
-        /** Retorna o usuário: login, senha e acessos **/
+        /**
+         * Retorna o usuário: login, senha e acessos
+         */
         return getAuthenticationManager()
                 .authenticate(new UsernamePasswordAuthenticationToken(userModel.getUsername(), userModel.getPassword()));
     }
