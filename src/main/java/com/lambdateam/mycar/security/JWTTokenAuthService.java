@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 
 /** QUINTO PASSO PARA IMPLANTAR O SPRING SECURITY -> Criar as configurações abaixo **/
@@ -32,7 +33,7 @@ public class JWTTokenAuthService {
     private static final String HEADER_STRING = "Authorization";
 
     /** Gerando token de autenticação e adicionando o cabeçalho em resposta Http **/
-    public void addAuthentication(HttpServletResponse response, String username) throws Exception {
+    public void addAuthentication(HttpServletResponse response, String username) throws IOException {
 
         /** Montagem do token **/
         String JWT = Jwts.builder() /** Chama o gerador de token **/
