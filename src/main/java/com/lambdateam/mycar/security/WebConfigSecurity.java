@@ -18,7 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     /** Configura as solicitações de acesso por http **/
     @Override
@@ -49,7 +49,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         /** Service que irá consultar o usuário no banco de dados **/
-        auth.userDetailsService(userDetailsService)
+        auth.userDetailsService(userDetailsServiceImpl)
                 /** Padrão de codificação **/
                 .passwordEncoder(new BCryptPasswordEncoder());
     }

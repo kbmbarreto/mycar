@@ -68,7 +68,10 @@ public class JWTTokenAuthService {
 
                 /** Retorna o usuário logado **/
                 if (userModel != null) {
-                    return new UsernamePasswordAuthenticationToken(userModel.getUsername(), userModel.getPassword(), userModel.getAuthorities());
+                    return new UsernamePasswordAuthenticationToken(
+                            userModel.getUsername(),
+                            userModel.getPassword(),
+                            userModel.getAuthorities());
                 }
             }
         }

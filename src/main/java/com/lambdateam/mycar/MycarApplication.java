@@ -1,6 +1,7 @@
 package com.lambdateam.mycar;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +21,7 @@ import java.util.TimeZone;
 @ComponentScan(basePackages = {"com.lambdateam.mycar.*"})
 @EnableJpaRepositories(basePackages = {"com.lambdateam.mycar.repository"})
 @EnableTransactionManagement
+@EnableWebMvc
 @RestController
 public class MycarApplication implements WebMvcConfigurer {
 
@@ -36,5 +39,6 @@ public class MycarApplication implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*").allowedOrigins("*");
+        registry.addMapping("/user/**").allowedMethods("*").allowedOrigins("*");
     }
 }
