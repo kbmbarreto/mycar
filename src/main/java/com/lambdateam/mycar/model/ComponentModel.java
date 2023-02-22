@@ -1,11 +1,18 @@
 package com.lambdateam.mycar.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+
+@Data
 @Entity
 @Table(name = "Component")
+@AllArgsConstructor
+@NoArgsConstructor
 public class ComponentModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,5 +22,6 @@ public class ComponentModel implements Serializable {
     private long id;
 
     @Column(name = "component", length = 75, columnDefinition = "VARCHAR(75)", nullable = false)
+    @NotNull(message = "Component is required")
     private String component;
 }

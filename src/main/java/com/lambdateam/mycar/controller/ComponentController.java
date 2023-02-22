@@ -1,59 +1,73 @@
 package com.lambdateam.mycar.controller;
 
+import com.lambdateam.mycar.dto.ComponentDto;
 import com.lambdateam.mycar.model.ComponentModel;
-import com.lambdateam.mycar.repository.ComponentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lambdateam.mycar.service.ComponentService;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/component")
 public class ComponentController {
 
-    @Autowired
-    private ComponentRepository componentRepository;
-
-    @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<ComponentModel> getComponentById(@PathVariable(value = "id") Long id) {
-
-        Optional<ComponentModel> componentModel = componentRepository.findById(id);
-
-        return new ResponseEntity(componentModel.get(), HttpStatus.OK);
+    private final ComponentService service;
+    private final ModelMapper mapper;
+    private ComponentDto convertToDto(ComponentModel model) {
+        return mapper.map(model, ComponentDto.class);
+    }
+    private ComponentModel convertToModel(ComponentDto dto) {
+        return mapper.map(dto, ComponentModel.class);
     }
 
-    @GetMapping(value = "/", produces = "application/json")
-    public ResponseEntity<List<ComponentModel>> listAllComponents() {
+    @GetMapping
+    public List<ComponentDto> getComponents() {
+        var componentList = StreamSupport
+                .stream(service.findAllComponents().spliterator(), false)
+                .collect(Collectors.toList());
 
-        List<ComponentModel> list = (List<ComponentModel>) componentRepository.findAll();
-
-        return new ResponseEntity<List<ComponentModel>>(list, HttpStatus.OK);
+        return componentList
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/", produces = "application/json")
-    public ResponseEntity<ComponentModel> createComponent(@RequestBody ComponentModel componentModel) {
-
-        ComponentModel componentSaved = componentRepository.save(componentModel);
-
-        return new ResponseEntity<ComponentModel>(componentSaved, HttpStatus.CREATED);
+    @GetMapping(value = "/{id}")
+    public ComponentDto getComponentById(@PathVariable("id") Long id) {
+        return convertToDto(service.findComponentById(id));
     }
 
-    @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<ComponentModel> fullUpdateComponent(@RequestBody ComponentModel componentModel) {
+    @PostMapping
+    public ResponseEntity<ComponentDto> postComponent(@Valid @RequestBody ComponentDto componentDto) {
+        var model = convertToModel(componentDto);
+        var component = service.createComponent(model);
 
-        ComponentModel componentSaved = componentRepository.save(componentModel);
-
-        return new ResponseEntity<ComponentModel>(componentSaved, HttpStatus.OK);
+        return new ResponseEntity(convertToDto(component), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/text")
-    public String deleteComponent(@PathVariable("id") Long id) {
+    @PutMapping(value = "/{id}")
+    public void putComponent(@PathVariable("id") Long id, @Valid @RequestBody ComponentDto componentDto) {
+        if(!id.equals(componentDto.getId())) throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "id does not match."
+        );
 
-        componentRepository.deleteById(id);
+        var componentModel = convertToModel(componentDto);
+        service.updateComponent(id, componentModel);
+    }
 
-        return "Successfully deleted";
+    @DeleteMapping(value = "/{id}")
+    public HttpStatus deleteComponentById(@PathVariable("id") Long id) {
+        service.deleteComponentById(id);
+        return HttpStatus.NO_CONTENT;
     }
 }

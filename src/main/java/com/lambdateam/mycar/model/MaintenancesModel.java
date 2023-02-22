@@ -1,12 +1,19 @@
 package com.lambdateam.mycar.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "Maintenances")
+@AllArgsConstructor
+@NoArgsConstructor
 public class MaintenancesModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,9 +23,11 @@ public class MaintenancesModel implements Serializable {
     private long id;
 
     @Column(name = "km", columnDefinition = "DECIMAL(7,3)", nullable = false)
+    @NotNull(message = "KM is required")
     private double km;
 
     @Column(name = "maintenance_date", nullable = false)
+    @NotNull(message = "Maintenance date is required")
     private Date maintenanceDate;
 
     @Column(name = "next_km", columnDefinition = "DECIMAL(7,2)")

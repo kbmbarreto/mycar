@@ -49,17 +49,17 @@ public class UserController {
         return new ResponseEntity<UserModel>(userSaved, HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/{id}", produces = "application/json")
-    public UserModel incrementalUpdateUser(@PathVariable("id") Long id, @RequestBody UserModel userModel) {
-
-        UserModel foundUser = getUserById(id).getBody();
-        assert foundUser != null;
-        foundUser.setEmail(Optional.ofNullable(userModel.getEmail()).orElse(foundUser.getEmail()));
-        foundUser.setUserName(Optional.ofNullable(userModel.getUserName()).orElse(foundUser.getUserName()));
-        foundUser.setPassword(Optional.ofNullable(userModel.getPassword()).orElse(foundUser.getPassword()));
-
-        return userRepository.save(foundUser);
-    }
+//    @PatchMapping(value = "/{id}", produces = "application/json")
+//    public UserModel incrementalUpdateUser(@PathVariable("id") Long id, @RequestBody UserModel userModel) {
+//
+//        UserModel foundUser = getUserById(id).getBody();
+//        assert foundUser != null;
+//        foundUser.setEmail(Optional.ofNullable(userModel.getEmail()).orElse(foundUser.getEmail()));
+//        foundUser.setUserName(Optional.ofNullable(userModel.getUserName()).orElse(foundUser.getUserName()));
+//        foundUser.setPassword(Optional.ofNullable(userModel.getPassword()).orElse(foundUser.getPassword()));
+//
+//        return userRepository.save(foundUser);
+//    }
 
     @DeleteMapping(value = "/{id}", produces = "application/text")
     public String deleteUser(@PathVariable("id") Long id) {
