@@ -44,6 +44,10 @@ public class MaintenancesModel implements Serializable {
     @JoinColumn(name = "id_vehicle")
     private VehicleModel vehicle;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_component")
+    private ComponentModel component;
+
     @Column(name = "maintenance_type")
     @Enumerated(value = EnumType.STRING)
     private MaintenanceTypeModel maintenanceType;
