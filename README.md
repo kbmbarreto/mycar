@@ -4,12 +4,12 @@
 
 ## Ferramentas utilizadas
 
-- Java
+- Java 17
 - Maven
 - Spring Boot
 - Spring Data JPA
-- Spring REST Core
 - Spring Web
+- Spring Data Reactive Redis
 - Spring Security
 - Oracle MySQL
 - JUnit 5
