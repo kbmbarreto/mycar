@@ -4,5 +4,6 @@ public enum MaintenanceTypeModel {
 
     PREVENTIVE,
     CORRECTIVE,
+    RECALL,
     OPTIONAL
 }

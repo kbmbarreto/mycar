@@ -7,7 +7,6 @@ import com.lambdateam.mycar.model.VehicleModel;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 

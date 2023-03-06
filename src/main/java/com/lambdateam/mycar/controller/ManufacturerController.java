@@ -1,59 +1,70 @@
 package com.lambdateam.mycar.controller;
 
+import com.lambdateam.mycar.dto.ManufacturerDto;
 import com.lambdateam.mycar.model.ManufacturerModel;
-import com.lambdateam.mycar.repository.ManufacturerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lambdateam.mycar.service.ManufacturerService;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/manufacturer")
 public class ManufacturerController {
 
-    @Autowired
-    private ManufacturerRepository manufacturerRepository;
+    private final ManufacturerService service;
+    private final ModelMapper mapper;
+    private ManufacturerDto convertToDto(ManufacturerModel model) { return mapper.map(model, ManufacturerDto.class); }
+    private ManufacturerModel convertToModel(ManufacturerDto dto) { return mapper.map(dto, ManufacturerModel.class); }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<ManufacturerModel> getManufacturerById(@PathVariable(value = "id") Long id) {
 
-        Optional<ManufacturerModel> manufacturerModel = manufacturerRepository.findById(id);
+    @GetMapping
+    public List<ManufacturerDto> getManufacturers() {
+        var manufacturersList = StreamSupport
+                .stream(service.findAllManufacturers().spliterator(), false)
+                .collect(Collectors.toList());
 
-        return new ResponseEntity(manufacturerModel.get(), HttpStatus.OK);
+        return manufacturersList
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/", produces = "application/json")
-    public ResponseEntity<List<ManufacturerModel>> listAllManufacturer() {
-
-        List<ManufacturerModel> list = (List<ManufacturerModel>) manufacturerRepository.findAll();
-
-        return new ResponseEntity<List<ManufacturerModel>>(list, HttpStatus.OK);
+    @GetMapping(value = "/{id}")
+    public ManufacturerDto getManufacturerById(@PathVariable("id") Long id) {
+        return convertToDto(service.findManufacturerById(id));
     }
 
-    @PostMapping(value = "/", produces = "application/json")
-    public ResponseEntity<ManufacturerModel> createManufacturer(@RequestBody ManufacturerModel manufacturerModel) {
+    @PostMapping
+    public ResponseEntity<ManufacturerDto> postManufacturer(@Valid @RequestBody ManufacturerDto manufacturerDto) {
+        var model = convertToModel(manufacturerDto);
+        var manufacturer = service.createManufacturer(model);
 
-        ManufacturerModel manufacturerSaved = manufacturerRepository.save(manufacturerModel);
-
-        return new ResponseEntity<ManufacturerModel>(manufacturerSaved, HttpStatus.CREATED);
+        return new ResponseEntity(convertToDto(manufacturer), HttpStatus.CREATED);
     }
 
-    @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<ManufacturerModel> fullUpdateManufacturer(@RequestBody ManufacturerModel manufacturerModel) {
+    @PutMapping(value = "/{id}")
+    public void putManufacturer(@PathVariable("id") Long id, @Valid @RequestBody ManufacturerDto manufacturerDto) {
+        if(!id.equals(manufacturerDto.getId())) throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "id does not match."
+        );
 
-        ManufacturerModel manufacturerSaved = manufacturerRepository.save(manufacturerModel);
-
-        return new ResponseEntity<ManufacturerModel>(manufacturerSaved, HttpStatus.OK);
+        var manufacturerModel = convertToModel(manufacturerDto);
+        service.updateManufacturer(id, manufacturerModel);
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/text")
-    public String deleteManufacturer(@PathVariable("id") Long id) {
-
-        manufacturerRepository.deleteById(id);
-
-        return "Successfully deleted";
+    @DeleteMapping(value = "/{id}")
+    public HttpStatus deleteManufacturerById(@PathVariable("id") Long id) {
+        service.deleteManufacturerById(id);
+        return HttpStatus.NO_CONTENT;
     }
 }
