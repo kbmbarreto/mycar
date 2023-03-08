@@ -1,52 +1,74 @@
 package com.lambdateam.mycar.controller;
 
+import com.lambdateam.mycar.dto.UserDto;
 import com.lambdateam.mycar.model.UserModel;
-import com.lambdateam.mycar.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.lambdateam.mycar.service.UserService;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<UserModel> getUserById(@PathVariable (value = "id") Long id) {
-
-        Optional<UserModel> userModel = userRepository.findById(id);
-
-        return new ResponseEntity(userModel.get(), HttpStatus.OK);
+    private final UserService service;
+    private final ModelMapper mapper;
+    private UserDto convertToDto(UserModel model) {
+        return mapper.map(model, UserDto.class);
+    }
+    private UserModel convertToModel(UserDto dto) {
+        return mapper.map(dto, UserModel.class);
     }
 
-    @GetMapping(value = "/", produces = "application/json")
-    public ResponseEntity<List<UserModel>> listAllUsers() {
+    @GetMapping
+    public List<UserDto> getUsers() {
+        var usersList = StreamSupport
+                .stream(service.findAllUsers().spliterator(), false)
+                .collect(Collectors.toList());
 
-        List<UserModel> list = (List<UserModel>) userRepository.findAll();
-
-        return new ResponseEntity<List<UserModel>>(list, HttpStatus.OK);
+        return usersList
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/", produces = "application/json")
-    public ResponseEntity<UserModel> createUser(@RequestBody UserModel userModel) {
-
-        UserModel userSaved = userRepository.save(userModel);
-
-        return new ResponseEntity<UserModel>(userSaved, HttpStatus.CREATED);
+    @GetMapping(value = "/{id}")
+    public UserDto getUserById(@PathVariable("id") Long id) {
+        return convertToDto(service.findUserById(id));
     }
 
-    @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<UserModel> fullUpdateUser(@RequestBody UserModel userModel) {
+    @PostMapping
+    public ResponseEntity<UserDto> postUser(@Valid @RequestBody UserDto userDto) {
+        var model = convertToModel(userDto);
+        var user = service.createUser(model);
 
-        UserModel userSaved = userRepository.save(userModel);
+        return new ResponseEntity(convertToDto(user), HttpStatus.CREATED);
+    }
 
-        return new ResponseEntity<UserModel>(userSaved, HttpStatus.OK);
+    @PutMapping(value = "/{id}")
+    public void putUser(@PathVariable("id") Long id, @Valid @RequestBody UserDto userDto) {
+        if(!id.equals(userDto.getId())) throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "id does not match."
+        );
+
+        var userModel = convertToModel(userDto);
+        service.updateUser(id, userModel);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public HttpStatus deleteUserById(@PathVariable("id") Long id) {
+        service.deleteUserById(id);
+        return HttpStatus.NO_CONTENT;
     }
 
 //    @PatchMapping(value = "/{id}", produces = "application/json")
@@ -60,12 +82,4 @@ public class UserController {
 //
 //        return userRepository.save(foundUser);
 //    }
-
-    @DeleteMapping(value = "/{id}", produces = "application/text")
-    public String deleteUser(@PathVariable("id") Long id) {
-
-        userRepository.deleteById(id);
-
-        return "Successfully deleted";
-    }
 }
