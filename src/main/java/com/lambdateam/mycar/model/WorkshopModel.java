@@ -27,5 +27,4 @@ public class WorkshopModel implements Serializable {
 
     @Column(name = "contact", length = 255, columnDefinition = "VARCHAR(255)")
     private String contact;
-
 }
