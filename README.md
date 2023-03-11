@@ -63,8 +63,9 @@ Neste projeto, no diretório devops, existe um arquivo jenkinsfile que contém  
 
 Para gerar um arquivo java executável, utilize o seguinte comando: `mvn package`
 
-## Tutoriais úteis para configurar sua estação de trabalho.
+## Links úteis.
 
+- [Swagger do projeto](http://localhost:8003/mycar/v1/swagger-ui/index.html#/)
 - [Configurar variáveis de ambiente JAVA](https://mauriciogeneroso.medium.com/configurando-java-4-como-configurar-as-vari%C3%A1veis-java-home-path-e-classpath-no-windows-46040950638f)
 - [Configurar variáveis de ambiente MAVEN](https://pt.stackoverflow.com/questions/259927/como-configurar-vari%C3%A1veis-de-ambiente-maven-java)
 - [Documentação da API (disponivel com o servidor rodando)](http://localhost:8003/mycar/v1/swagger-ui.html#)

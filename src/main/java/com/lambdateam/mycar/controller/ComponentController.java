@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.ComponentModel;
 import com.lambdateam.mycar.service.ComponentService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,10 @@ public class ComponentController {
     }
 
     @GetMapping
-    public List<ComponentDto> getComponents() {
+    public List<ComponentDto> getComponents(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                     pageable.getPageNumber();
+        
         var componentList = StreamSupport
                 .stream(service.findAllComponents().spliterator(), false)
                 .collect(Collectors.toList());
