@@ -9,8 +9,8 @@
 - Spring Boot
 - Spring Data JPA
 - Spring Web
-- Spring Data Reactive Redis
 - Spring Security
+- Redis
 - Oracle MySQL
 - JUnit 5
 - Rest Assured
@@ -43,6 +43,13 @@ spring.mvc.pathmatch.matching-strategy=ant_path_matcher
 ````
 
 Em seguida, basta criar um banco de dados no MySql com o comando `Create schema {nomeDoBancoDeDados}`
+
+Também será necessário instalar o Redis para o funcionamento do caching. O Redis é um armazenamento de estrutura de dados em memória, usado como um banco 
+de dados em memória distribuído de chave-valor, cache e agente de mensagens, com durabilidade opcional. Ele permite baixa latência e acesso mais rápido aos 
+dados. Comparado aos bancos de dados tradicionais, o Redis não requer acesso ao disco, tendo todos os dados armazenados em cache na memória, o que dá uma 
+resposta mais rápida.
+
+Para instalar o Redis no macOS: `brew install redis`, e para rodar o servidor: `brew services start redis`
 
 ## Execução de testes unitários
 
