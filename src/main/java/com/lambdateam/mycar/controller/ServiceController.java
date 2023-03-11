@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.ServiceModel;
 import com.lambdateam.mycar.service.ServiceService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,13 @@ public class ServiceController {
     private ServiceModel convertToModel(ServiceDto dto) { return mapper.map(dto, ServiceModel.class); }
 
     @GetMapping
-    public List<ServiceDto> getServices() {
+    public List<ServiceDto> getServices(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                pageable.getPageNumber();
+
         var servicesList = StreamSupport
                 .stream(serviceService.findAllServices().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return servicesList

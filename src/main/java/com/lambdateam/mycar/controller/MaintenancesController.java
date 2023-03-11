@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.MaintenancesModel;
 import com.lambdateam.mycar.service.MaintenancesService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,13 @@ public class MaintenancesController {
     private MaintenancesModel convertToModel(MaintenancesDto dto) { return mapper.map(dto, MaintenancesModel.class); }
 
     @GetMapping
-    public List<MaintenancesDto> getMaintenances() {
+    public List<MaintenancesDto> getMaintenances(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                pageable.getPageNumber();
+
         var maintenancesList = StreamSupport
                 .stream(service.findAllMaintenances().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return maintenancesList

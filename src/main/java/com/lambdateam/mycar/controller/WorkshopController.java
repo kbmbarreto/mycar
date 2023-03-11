@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.WorkshopModel;
 import com.lambdateam.mycar.service.WorkshopService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,13 @@ public class WorkshopController {
     }
 
     @GetMapping
-    public List<WorkshopDto> getWorkshops() {
+    public List<WorkshopDto> getWorkshops(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                pageable.getPageNumber();
+
         var workshopsList = StreamSupport
                 .stream(service.findAllWorkshops().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return workshopsList

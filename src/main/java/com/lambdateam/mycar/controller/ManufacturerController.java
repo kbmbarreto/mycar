@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.ManufacturerModel;
 import com.lambdateam.mycar.service.ManufacturerService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,13 @@ public class ManufacturerController {
 
 
     @GetMapping
-    public List<ManufacturerDto> getManufacturers() {
+    public List<ManufacturerDto> getManufacturers(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                pageable.getPageNumber();
+
         var manufacturersList = StreamSupport
                 .stream(service.findAllManufacturers().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return manufacturersList

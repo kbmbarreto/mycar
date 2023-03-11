@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.VehicleModel;
 import com.lambdateam.mycar.service.VehicleService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,13 @@ public class VehicleController {
     }
 
     @GetMapping
-    public List<VehicleDto> getVehicles() {
+    public List<VehicleDto> getVehicles(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                pageable.getPageNumber();
+
         var vehiclesList = StreamSupport
                 .stream(service.findAllVehicles().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return vehiclesList

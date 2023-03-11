@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.UserModel;
 import com.lambdateam.mycar.service.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,13 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getUsers() {
+    public List<UserDto> getUsers(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                pageable.getPageNumber();
+
         var usersList = StreamSupport
                 .stream(service.findAllUsers().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return usersList

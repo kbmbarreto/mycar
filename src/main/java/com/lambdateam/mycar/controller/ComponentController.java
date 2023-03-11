@@ -37,6 +37,7 @@ public class ComponentController {
         
         var componentList = StreamSupport
                 .stream(service.findAllComponents().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return componentList

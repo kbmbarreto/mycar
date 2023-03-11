@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.ShoppingListModel;
 import com.lambdateam.mycar.service.ShoppingListService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,13 @@ public class ShoppingListController {
     }
 
     @GetMapping
-    public List<ShoppingListDto> getShoppingList() {
+    public List<ShoppingListDto> getShoppingList(Pageable pageable) {
+        int toSkip = pageable.getPageSize() *
+                pageable.getPageNumber();
+
         var shoppingList = StreamSupport
                 .stream(service.findAllShoppingListItems().spliterator(), false)
+                .skip(toSkip).limit(pageable.getPageSize())
                 .collect(Collectors.toList());
 
         return shoppingList
