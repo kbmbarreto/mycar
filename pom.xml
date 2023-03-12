@@ -47,6 +47,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
         </exclusions>
     </dependency>
 
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
     <!-- Getters and Setters -->
     <dependency>
         <groupId>org.projectlombok</groupId>
