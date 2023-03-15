@@ -98,7 +98,7 @@ public class UserService {
 
         var user = findOrThrow(id);
         var userParam = convertToEntity(userDto);
-        user.setUsername(userParam.getUsername());
+        user.setUser(userParam.getUser());
         user.setEmail(userParam.getEmail());
         user.setMobileNumber(userParam.getMobileNumber());
         if (!password.isBlank()) {

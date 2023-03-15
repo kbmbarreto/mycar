@@ -11,7 +11,7 @@ public class UserDto {
 
     private Long id;
     @NotNull(message = "Name is required")
-    private String username;
+    private String user;
     @NotNull(message = "E-mail is required")
     private String email;
     private String mobileNumber;
