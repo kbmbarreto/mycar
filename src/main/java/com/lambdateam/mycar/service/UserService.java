@@ -31,6 +31,10 @@ public class UserService {
         return mapper.map(dto, UserModel.class);
     }
 
+    public UserModel searchByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
     public List<UserDto> findAllUsers() {
 
         var userEntityList =
