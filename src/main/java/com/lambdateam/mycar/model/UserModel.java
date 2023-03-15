@@ -20,15 +20,21 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", length = 60, columnDefinition = "VARCHAR(60)", nullable = false)
+    @Column(name = "user", length = 60, columnDefinition = "VARCHAR(60)", nullable = false)
     @NotNull(message = "Name is required")
-    private String username;
+    private String user;
 
-    @Column(name = "email", length = 60, columnDefinition = "VARCHAR(60)", nullable = false)
+    @Column(name = "email", length = 60, columnDefinition = "VARCHAR(60)", nullable = false, unique = true)
     @NotNull(message = "E-mail is required")
     private String email;
 
-    @Column(name = "password", columnDefinition = "VARCHAR(255)", nullable = false)
-    @NotNull(message = "Password is required")
-    private String password;
+    private String mobileNumber;
+    private byte[] storedHash;
+    private byte[] storedSalt;
+
+    public UserModel(String username, String email, String mobileNumber) {
+        this.user = username;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+    }
 }
