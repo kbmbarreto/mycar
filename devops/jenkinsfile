@@ -7,7 +7,7 @@ agent any
 
         stages {
 
-            stage('Clean old files') {
+            stage('Cleaning project') {
                 steps {
                     withMaven(maven: 'Maven3') {
                         sh "mvn clean"
