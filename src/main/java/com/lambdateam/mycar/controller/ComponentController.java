@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,6 +27,7 @@ public class ComponentController {
 
     private final ComponentService service;
     private final ModelMapper mapper;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComponentController.class);
     private ComponentDto convertToDto(ComponentModel model) {
         return mapper.map(model, ComponentDto.class);
     }
@@ -36,7 +39,9 @@ public class ComponentController {
     public List<ComponentDto> getComponents(Pageable pageable) {
         int toSkip = pageable.getPageSize() *
                      pageable.getPageNumber();
-        
+
+        LOGGER.info("SL4J: Getting component list - getComponents()");
+
         var componentList = StreamSupport
                 .stream(service.findAllComponents().spliterator(), false)
                 .skip(toSkip).limit(pageable.getPageSize())
