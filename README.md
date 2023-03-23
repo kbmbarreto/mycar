@@ -10,11 +10,12 @@
 - Spring Data JPA
 - Spring Web
 - Spring Security
-- Redis
+- Redis (for caching)
 - Oracle MySQL
+- H2 database (for using in tests)
 - JUnit 5
-- Rest Assured
-- Swagger 2
+- Mockito
+- OpenAPI (Swagger)
 - Jenkins
 
 ## Preparação do ambiente
