@@ -19,7 +19,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
 <description>Sistema para controle de manutenção veicular</description>
 
 <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
 </properties>
 
 <dependencies>
