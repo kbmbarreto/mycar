@@ -1,5 +1,6 @@
 package com.lambdateam.mycar.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,7 +49,7 @@ public class MaintenancesModel implements Serializable {
     @JoinColumn(name = "id_component")
     private ComponentModel component;
 
-    @Column(name = "maintenance_type")
-    @Enumerated(value = EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_maintenance_type")
     private MaintenanceTypeModel maintenanceType;
 }

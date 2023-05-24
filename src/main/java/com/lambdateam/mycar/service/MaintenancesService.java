@@ -1,13 +1,18 @@
 package com.lambdateam.mycar.service;
 
+import com.lambdateam.mycar.dto.MaintenancesDto;
 import com.lambdateam.mycar.exception.NotFoundException;
+import com.lambdateam.mycar.model.ComponentModel;
 import com.lambdateam.mycar.model.MaintenancesModel;
+import com.lambdateam.mycar.model.ManufacturerModel;
 import com.lambdateam.mycar.repository.MaintenancesRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,9 +29,9 @@ public class MaintenancesService {
                 );
     }
 
-//    public List<Object[]> findAllMaintenancesWithDetails() {
-//        return repository.getMaintenancesWithDetails();
-//    }
+    public List<Object[]> findAllMaintenancesWithDetails() {
+        return repository.getMaintenancesWithDetails();
+    }
 
     public Iterable<MaintenancesModel> findAllMaintenances() {
         return repository.findAll();

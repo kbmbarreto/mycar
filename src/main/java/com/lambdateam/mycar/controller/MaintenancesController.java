@@ -49,10 +49,10 @@ public class MaintenancesController {
         return convertToDto(service.findMaintenanceById(id));
     }
 
-//    @GetMapping(value = "/withDetails")
-//    public List<Object[]> getAllMaintenancesWithDetails() {
-//        return service.findAllMaintenancesWithDetails();
-//    }
+    @GetMapping(value = "/withDetails")
+    public List<Object[]> getAllMaintenancesWithDetails() {
+        return service.findAllMaintenancesWithDetails();
+    }
 
     @PostMapping
     public ResponseEntity<MaintenancesDto> postMaintenance(@Valid @RequestBody MaintenancesDto maintenancesDto) {
