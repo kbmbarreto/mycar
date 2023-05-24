@@ -1,5 +1,6 @@
 package com.lambdateam.mycar.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.lambdateam.mycar.model.ComponentModel;
 import com.lambdateam.mycar.model.MaintenanceTypeModel;
 import com.lambdateam.mycar.model.ManufacturerModel;
@@ -12,6 +13,7 @@ import java.sql.Date;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MaintenancesDto {
 
     private long id;
