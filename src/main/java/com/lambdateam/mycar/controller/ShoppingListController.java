@@ -53,6 +53,11 @@ public class ShoppingListController {
         return convertToDto(service.findShoppingListItemById(id));
     }
 
+    @GetMapping(value = "/withDetails")
+    public List<Object[]> getAllShoppingListWithDetails() {
+        return service.findAllShoppingListWithDetails();
+    }
+
     @PostMapping
     public ResponseEntity<ShoppingListDto> postShoppingListItem(@Valid @RequestBody ShoppingListDto shoppingListDto) {
         var model = convertToModel(shoppingListDto);

@@ -49,6 +49,11 @@ public class MaintenancesController {
         return convertToDto(service.findMaintenanceById(id));
     }
 
+//    @GetMapping(value = "/withDetails")
+//    public List<Object[]> getAllMaintenancesWithDetails() {
+//        return service.findAllMaintenancesWithDetails();
+//    }
+
     @PostMapping
     public ResponseEntity<MaintenancesDto> postMaintenance(@Valid @RequestBody MaintenancesDto maintenancesDto) {
         var model = convertToModel(maintenancesDto);
@@ -73,19 +78,4 @@ public class MaintenancesController {
         service.deleteMaintenanceById(id);
         return HttpStatus.NO_CONTENT;
     }
-
-//    @PatchMapping(value = "/{id}", produces = "application/json")
-//    public MaintenancesModel incrementalUpdateMaintenance(@PathVariable("id") Long id, @RequestBody MaintenancesModel maintenancesModel) {
-//
-//        MaintenancesModel foundMaintenance = getMaintenanceById(id).getBody();
-//        assert foundMaintenance != null;
-//        foundMaintenance.setMaintenanceDate(Optional.ofNullable(maintenancesModel.getMaintenanceDate()).orElse(foundMaintenance.getMaintenanceDate()));
-//        foundMaintenance.setVehicle(Optional.ofNullable(maintenancesModel.getVehicle()).orElse(foundMaintenance.getVehicle()));
-//        foundMaintenance.setAmount(Optional.ofNullable(maintenancesModel.getAmount()).orElse(foundMaintenance.getAmount()));
-//        foundMaintenance.setMaintenanceType(Optional.ofNullable(maintenancesModel.getMaintenanceType()).orElse(foundMaintenance.getMaintenanceType()));
-//        foundMaintenance.setManufacturer(Optional.ofNullable(maintenancesModel.getManufacturer()).orElse(foundMaintenance.getManufacturer()));
-//        foundMaintenance.setNextKm(Optional.ofNullable(maintenancesModel.getNextKm()).orElse(foundMaintenance.getNextKm()));
-//
-//        return maintenancesRepository.save(foundMaintenance);
-//    }
 }
