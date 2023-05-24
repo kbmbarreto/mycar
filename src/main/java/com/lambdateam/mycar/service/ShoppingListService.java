@@ -6,6 +6,8 @@ import com.lambdateam.mycar.repository.ShoppingListRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class ShoppingListService {
@@ -18,6 +20,10 @@ public class ShoppingListService {
                 .orElseThrow(
                         () -> new NotFoundException("The shopping list item " + id +" was not found.")
                 );
+    }
+
+    public List<Object[]> findAllShoppingListWithDetails() {
+        return repository.getShoppingListWithDetails();
     }
 
     public Iterable<ShoppingListModel> findAllShoppingListItems() {

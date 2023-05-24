@@ -6,6 +6,8 @@ import com.lambdateam.mycar.repository.ServiceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class ServiceService {
@@ -18,6 +20,10 @@ public class ServiceService {
                 .orElseThrow(
                         () -> new NotFoundException("The service id " + id +" was not found.")
                 );
+    }
+
+    public List<Object[]> findAllServicesWithDetails() {
+        return repository.getServicesWithDetails();
     }
 
     public Iterable<ServiceModel> findAllServices() {

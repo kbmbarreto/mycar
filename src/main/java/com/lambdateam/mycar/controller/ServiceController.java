@@ -49,6 +49,11 @@ public class ServiceController {
         return convertToDto(serviceService.findServiceById(id));
     }
 
+    @GetMapping(value = "/withDetails")
+    public List<Object[]> getAllServiceWithDetails() {
+        return serviceService.findAllServicesWithDetails();
+    }
+
     @PostMapping
     public ResponseEntity<ServiceDto> postService(@Valid @RequestBody ServiceDto serviceDto) {
         var model = convertToModel(serviceDto);

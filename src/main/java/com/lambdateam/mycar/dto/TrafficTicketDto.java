@@ -3,20 +3,19 @@ package com.lambdateam.mycar.dto;
 import com.lambdateam.mycar.model.VehicleModel;
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Getter
 @Setter
-public class TechnicalVisitDto {
+public class TrafficTicketDto {
 
-    private Long id;
-    @NotNull(message = "Maintenance is required")
-    private Date maintenanceDate;
+    private long id;
     @NotNull(message = "Description is required")
     private String description;
-    private String localeDoc;
-    @NotNull(message = "Conclude is required")
-    private boolean conclude;
+    @NotNull(message = "Date is required")
+    private Date date;
+    private String notes;
     private VehicleModel vehicle;
 }
