@@ -31,7 +31,7 @@ public class MaintenancesModel implements Serializable {
     @NotNull(message = "Maintenance date is required")
     private Date maintenanceDate;
 
-    @Column(name = "next_km", columnDefinition = "DECIMAL(7,2)")
+    @Column(name = "next_km", columnDefinition = "DECIMAL(7,3)")
     private double nextKm;
 
     @Column(name = "amount", columnDefinition = "DECIMAL(7,2)")
