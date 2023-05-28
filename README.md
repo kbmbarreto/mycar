@@ -16,6 +16,8 @@
 - JUnit 5
 - Mockito
 - OpenAPI (Swagger)
+- Lombok
+- SL4J
 - Jenkins
 
 ## Preparação do ambiente
@@ -66,9 +68,8 @@ Para gerar um arquivo java executável, utilize o seguinte comando: `mvn package
 
 ## Links úteis.
 
-- [Swagger do projeto](http://localhost:8003/mycar/v1/swagger-ui/index.html#/)
+- [Documentação da API (disponivel pelo Swagger, com o servidor rodando)](http://localhost:8003/mycar/v1/swagger-ui.html#)
 - [Configurar variáveis de ambiente JAVA](https://mauriciogeneroso.medium.com/configurando-java-4-como-configurar-as-vari%C3%A1veis-java-home-path-e-classpath-no-windows-46040950638f)
 - [Configurar variáveis de ambiente MAVEN](https://pt.stackoverflow.com/questions/259927/como-configurar-vari%C3%A1veis-de-ambiente-maven-java)
-- [Documentação da API (disponivel com o servidor rodando)](http://localhost:8003/mycar/v1/swagger-ui.html#)
 - [Dicas de como configurar o Swagger 2](https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api)
 - [Dicas de como configurar o Jenkins](https://medium.com/cwi-software/testes-automatizados-no-jenkins-recursos-plugins-e-dicas-para-aumentar-a-produtividade-1685ffa1e9db#:~:text=Como%20configurar%3A,pasta%20%E2%80%9Csurefire%2Dreports%E2%80%9D.)
