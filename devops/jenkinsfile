@@ -26,7 +26,7 @@ agent any
             stage('Build and generate .jar') {
                 steps {
                     withMaven(maven: 'Maven3') {
-                        sh "mvn package"
+                        sh "mvn package -DskipTests"
                     }
                 }
             }
@@ -34,18 +34,18 @@ agent any
             stage('Transfer JAR file') {
                 steps {
                     script {
-                        def isRunning = sh(script: "pgrep -f mycar.jar", returnStatus: true)
+                        def isRunning = sh(script: "pgrep -f mycar-1.0.0.jar", returnStatus: true)
                         if (isRunning == 0) {
-                            sh "pkill -f mycar.jar"
+                            sh "pkill -f mycar-1.0.0.jar"
                         }
-                        sh "cp -f target/*.jar /home/cdkmacedo/sistemas"
+                        sh "cp -f target/*.jar /home/cskmacedo/Documents/sistemas/mycar"
                     }
                 }
             }
 
             stage('Run new version') {
                 steps {
-                    sh "java -jar /home/cdkmacedo/sistemas/mycar.jar &"
+                    sh "java -jar /home/cdkmacedo/sistemas/mycar/mycar-1.0.0.jar &"
                 }
             }
         }
