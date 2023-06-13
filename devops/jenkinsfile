@@ -6,6 +6,12 @@ pipeline {
     }
 
     stages {
+        stage('Preparation') {
+            steps {
+                sh 'rm -rf /home/cskmacedo/.jenkins/jobs/mycar-production/builds/*/archive/com/lambdateam/mycar/1.0.0/mycar-1.0.0.jar'
+            }
+        }
+
         stage('Clone project') {
             steps {
                 git branch: 'main', url: 'https://github.com/kbmbarreto/mycar'
