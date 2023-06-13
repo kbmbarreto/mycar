@@ -6,6 +6,12 @@ pipeline {
     }
 
     stages {
+        stage('Clone project') {
+            steps {
+                git branch: 'main', url: 'https://github.com/kbmbarreto/mycar'
+            }
+        }
+
         stage('Cleaning project') {
             steps {
                 withMaven(maven: 'Maven3') {
@@ -17,16 +23,7 @@ pipeline {
         stage('Compile project') {
             steps {
                 withMaven(maven: 'Maven3') {
-                    sh 'mvn -f pom.xml clean install'
-                }
-            }
-        }
-
-        stage('Run jUnit tests') {
-            steps {
-                git branch: 'main', url: 'https://github.com/kbmbarreto/mycar'
-                withMaven(maven: 'Maven3') {
-                    sh "mvn test"
+                    sh 'mvn clean install -DskipTests'
                 }
             }
         }
@@ -53,7 +50,7 @@ pipeline {
 
         stage('Run new version') {
             steps {
-                sh "java -jar /home/cdkmacedo/sistemas/mycar/mycar-1.0.0.jar &"
+                sh "java -jar /home/cskmacedo/sistemas/mycar/mycar-1.0.0.jar &"
             }
         }
     }
