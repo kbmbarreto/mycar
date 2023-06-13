@@ -1,52 +1,52 @@
 pipeline {
-agent any
+    agent any
 
-        options {
-            timeout(time: 80, unit: 'MINUTES')
-        }
+    options {
+        timeout(time: 80, unit: 'MINUTES')
+    }
 
-        stages {
-
-            stage('Cleaning project') {
-                steps {
-                    withMaven(maven: 'Maven3') {
-                        sh "mvn clean"
-                }
-            }
-
-            stage('Run jUnit tests') {
-                steps {
-                    git branch: 'main', url: 'https://github.com/kbmbarreto/mycar'
-                    withMaven(maven: 'Maven3') {
-                        sh "mvn test"
-                    }
-                }
-            }
-
-            stage('Build and generate .jar') {
-                steps {
-                    withMaven(maven: 'Maven3') {
-                        sh "mvn package -DskipTests"
-                    }
-                }
-            }
-
-            stage('Transfer JAR file') {
-                steps {
-                    script {
-                        def isRunning = sh(script: "pgrep -f mycar-1.0.0.jar", returnStatus: true)
-                        if (isRunning == 0) {
-                            sh "pkill -f mycar-1.0.0.jar"
-                        }
-                        sh "cp -f target/*.jar /home/cskmacedo/Documents/sistemas/mycar"
-                    }
-                }
-            }
-
-            stage('Run new version') {
-                steps {
-                    sh "java -jar /home/cdkmacedo/sistemas/mycar/mycar-1.0.0.jar &"
+    stages {
+        stage('Cleaning project') {
+            steps {
+                withMaven(maven: 'Maven3') {
+                    sh "mvn clean"
                 }
             }
         }
+
+        stage('Run jUnit tests') {
+            steps {
+                git branch: 'main', url: 'https://github.com/kbmbarreto/mycar'
+                withMaven(maven: 'Maven3') {
+                    sh "mvn test"
+                }
+            }
+        }
+
+        stage('Build and generate .jar') {
+            steps {
+                withMaven(maven: 'Maven3') {
+                    sh "mvn package -DskipTests"
+                }
+            }
+        }
+
+        stage('Transfer JAR file') {
+            steps {
+                script {
+                    def isRunning = sh(script: "pgrep -f mycar-1.0.0.jar", returnStatus: true)
+                    if (isRunning == 0) {
+                        sh "pkill -f mycar-1.0.0.jar"
+                    }
+                    sh "cp -f target/*.jar /home/cskmacedo/Documents/sistemas/mycar"
+                }
+            }
+        }
+
+        stage('Run new version') {
+            steps {
+                sh "java -jar /home/cdkmacedo/sistemas/mycar/mycar-1.0.0.jar &"
+            }
+        }
+    }
 }
