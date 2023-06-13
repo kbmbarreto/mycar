@@ -13,18 +13,10 @@ agent any
                         sh "mvn clean"
                 }
             }
-        }
-
-            stage ('Compile project') {
-                steps {
-                    withMaven(maven: 'Maven3') {
-                        sh ' mvn -f pom.xml clean install'
-                    }
-                }
-        }
 
             stage('Run jUnit tests') {
                 steps {
+                    git branch: 'main', url: 'https://github.com/kbmbarreto/mycar'
                     withMaven(maven: 'Maven3') {
                         sh "mvn test"
                     }
@@ -36,6 +28,24 @@ agent any
                     withMaven(maven: 'Maven3') {
                         sh "mvn package"
                     }
+                }
+            }
+
+            stage('Transfer JAR file') {
+                steps {
+                    script {
+                        def isRunning = sh(script: "pgrep -f mycar.jar", returnStatus: true)
+                        if (isRunning == 0) {
+                            sh "pkill -f mycar.jar"
+                        }
+                        sh "cp -f target/*.jar /home/cdkmacedo/sistemas"
+                    }
+                }
+            }
+
+            stage('Run new version') {
+                steps {
+                    sh "java -jar /home/cdkmacedo/sistemas/mycar.jar &"
                 }
             }
         }
