@@ -29,7 +29,7 @@ public class MaintenancesService {
                 );
     }
 
-    public List<Object[]> findAllMaintenancesWithDetails() {
+    public List<MaintenancesModel> findAllMaintenancesWithDetails() {
         return repository.getMaintenancesWithDetails();
     }
 

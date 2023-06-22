@@ -54,7 +54,7 @@ public class ShoppingListController {
     }
 
     @GetMapping(value = "/withDetails")
-    public List<Object[]> getAllShoppingListWithDetails() {
+    public List<ShoppingListModel> getAllShoppingListWithDetails() {
         return service.findAllShoppingListWithDetails();
     }
 

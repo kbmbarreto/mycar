@@ -22,7 +22,7 @@ public class ShoppingListService {
                 );
     }
 
-    public List<Object[]> findAllShoppingListWithDetails() {
+    public List<ShoppingListModel> findAllShoppingListWithDetails() {
         return repository.getShoppingListWithDetails();
     }
 
