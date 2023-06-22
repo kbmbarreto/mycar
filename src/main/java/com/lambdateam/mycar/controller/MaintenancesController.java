@@ -50,7 +50,7 @@ public class MaintenancesController {
     }
 
     @GetMapping(value = "/withDetails")
-    public List<Object[]> getAllMaintenancesWithDetails() {
+    public List<MaintenancesModel> getAllMaintenancesWithDetails() {
         return service.findAllMaintenancesWithDetails();
     }
 

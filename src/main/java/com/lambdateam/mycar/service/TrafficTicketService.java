@@ -26,7 +26,7 @@ public class TrafficTicketService {
         return repository.findAll();
     }
 
-    public List<Object[]> findAllTrafficTicketsWithDetails() {
+    public List<TrafficTicketModel> findAllTrafficTicketsWithDetails() {
         return repository.getTrafficTicketWithDetails();
     }
 

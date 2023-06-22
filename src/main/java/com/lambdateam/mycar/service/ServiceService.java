@@ -22,7 +22,7 @@ public class ServiceService {
                 );
     }
 
-    public List<Object[]> findAllServicesWithDetails() {
+    public List<ServiceModel> findAllServicesWithDetails() {
         return repository.getServicesWithDetails();
     }
 

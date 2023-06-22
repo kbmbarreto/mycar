@@ -50,7 +50,7 @@ public class TrafficTicketController {
     }
 
     @GetMapping(value = "/withDetails")
-    public List<Object[]> getAllTrafficTicketsWithDetails() {
+    public List<TrafficTicketModel> getAllTrafficTicketsWithDetails() {
         return service.findAllTrafficTicketsWithDetails();
     }
 

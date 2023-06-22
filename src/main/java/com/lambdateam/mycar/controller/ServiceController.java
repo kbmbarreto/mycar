@@ -50,7 +50,7 @@ public class ServiceController {
     }
 
     @GetMapping(value = "/withDetails")
-    public List<Object[]> getAllServiceWithDetails() {
+    public List<ServiceModel> getAllServiceWithDetails() {
         return serviceService.findAllServicesWithDetails();
     }
 
