@@ -4,6 +4,7 @@ import com.lambdateam.mycar.dto.UserDto;
 import com.lambdateam.mycar.service.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,6 @@ import java.security.NoSuchAlgorithmException;
 public class UserController {
 
     private final UserService service;
-    private final ModelMapper mapper;
-
     @GetMapping
     public Iterable<UserDto> getUsers() {
 
@@ -36,6 +35,13 @@ public class UserController {
             throws NoSuchAlgorithmException {
         return service.createUser(userDto,
                 userDto.getPassword());
+    }
+
+    @PatchMapping(value = "/{id}")
+    public void patchUser(@PathVariable("id") Long id, @Valid @RequestBody UserDto userDto)
+            throws NoSuchAlgorithmException {
+
+        service.updateUser(id, userDto, userDto.getPassword());
     }
 
     @PutMapping(value = "/{id}")

@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.lambdateam.mycar.exception.ExpiredJwtException;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 
@@ -23,7 +25,7 @@ public class ComponentServiceTest {
 
 
     @Test
-    void canFindAllComponents() {
+    void canFindAllComponents() throws ExpiredJwtException {
         // when
         underTest.findAllComponents();
         // then
@@ -31,7 +33,7 @@ public class ComponentServiceTest {
     }
 
     @Test
-    void canAddComponent() {
+    void canAddComponent() throws ExpiredJwtException {
         // given
         ComponentModel component = new ComponentModel(
                 Long.getLong("9999", 9999),

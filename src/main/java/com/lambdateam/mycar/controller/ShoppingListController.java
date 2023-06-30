@@ -1,11 +1,14 @@
 package com.lambdateam.mycar.controller;
 
 import com.lambdateam.mycar.dto.ShoppingListDto;
+import com.lambdateam.mycar.exception.ExpiredJwtException;
 import com.lambdateam.mycar.model.ShoppingListModel;
 import com.lambdateam.mycar.service.ShoppingListService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,10 +24,12 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/shoppingList")
 @PreAuthorize("isAuthenticated()")
+@RedisHash("ShoppingList")
 public class ShoppingListController {
 
     private final ShoppingListService service;
     private final ModelMapper mapper;
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ShoppingListController.class);
     private ShoppingListDto convertToDto(ShoppingListModel model) {
         return mapper.map(model, ShoppingListDto.class);
     }
@@ -33,7 +38,10 @@ public class ShoppingListController {
     }
 
     @GetMapping
-    public List<ShoppingListDto> getShoppingList(Pageable pageable) {
+    public List<ShoppingListDto> getShoppingList(Pageable pageable) throws ExpiredJwtException {
+
+        LOGGER.info("SL4J: Getting shopping list - /shoppingList");
+
         int toSkip = pageable.getPageSize() *
                 pageable.getPageNumber();
 
@@ -49,17 +57,20 @@ public class ShoppingListController {
     }
 
     @GetMapping(value = "/{id}")
-    public ShoppingListDto getShoppingListItemById(@PathVariable("id") Long id) {
+    public ShoppingListDto getShoppingListItemById(@PathVariable("id") Long id) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting shopping list item by id - /shoppingList/{id}");
         return convertToDto(service.findShoppingListItemById(id));
     }
 
     @GetMapping(value = "/withDetails")
-    public List<ShoppingListModel> getAllShoppingListWithDetails() {
+    public List<ShoppingListModel> getAllShoppingListWithDetails() throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting shopping list with details - /shoppingList/withDetails");
         return service.findAllShoppingListWithDetails();
     }
 
     @PostMapping
-    public ResponseEntity<ShoppingListDto> postShoppingListItem(@Valid @RequestBody ShoppingListDto shoppingListDto) {
+    public ResponseEntity<ShoppingListDto> postShoppingListItem(@Valid @RequestBody ShoppingListDto shoppingListDto) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Posting shopping list item - /shoppingList");
         var model = convertToModel(shoppingListDto);
         var shoppingListItem = service.createShoppingListItem(model);
 
@@ -67,7 +78,8 @@ public class ShoppingListController {
     }
 
     @PutMapping(value = "/{id}")
-    public void putShoppingListItem(@PathVariable("id") Long id, @Valid @RequestBody ShoppingListDto shoppingListDto) {
+    public void putShoppingListItem(@PathVariable("id") Long id, @Valid @RequestBody ShoppingListDto shoppingListDto) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Putting shopping list item - /shoppingList/{id}");
         if(!id.equals(shoppingListDto.getId())) throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "id does not match."
@@ -78,7 +90,8 @@ public class ShoppingListController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteShoppingListItemById(@PathVariable("id") Long id) {
+    public HttpStatus deleteShoppingListItemById(@PathVariable("id") Long id) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Deleting shopping list item by id - /shoppingList/{id}");
         service.deleteShoppingListItemById(id);
         return HttpStatus.NO_CONTENT;
     }
