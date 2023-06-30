@@ -1,22 +1,21 @@
 package com.lambdateam.mycar.controller;
 
-import com.lambdateam.mycar.dto.ComponentDto;
 import com.lambdateam.mycar.dto.MaintenanceTypeDto;
-import com.lambdateam.mycar.model.ComponentModel;
 import com.lambdateam.mycar.model.MaintenanceTypeModel;
-import com.lambdateam.mycar.service.ComponentService;
 import com.lambdateam.mycar.service.MaintenanceTypeService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisHash;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.lambdateam.mycar.exception.ExpiredJwtException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +25,7 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/maintenanceType")
 @PreAuthorize("isAuthenticated()")
+@RedisHash("MaintenanceType")
 public class MaintenanceTypeController {
 
     private final MaintenanceTypeService service;
@@ -39,11 +39,11 @@ public class MaintenanceTypeController {
     }
 
     @GetMapping
-    public List<MaintenanceTypeDto> getMaintenanceType(Pageable pageable) {
+    public List<MaintenanceTypeDto> getMaintenanceType(Pageable pageable) throws ExpiredJwtException {
         int toSkip = pageable.getPageSize() *
                      pageable.getPageNumber();
 
-        LOGGER.info("SL4J: Getting maintenance types list - getMaintennaceTypes()");
+        LOGGER.info("SL4J: Getting maintenance types list - /maintenanceType");
 
         var componentList = StreamSupport
                 .stream(service.findAllMaintenanceTypes().spliterator(), false)
@@ -57,12 +57,14 @@ public class MaintenanceTypeController {
     }
 
     @GetMapping(value = "/{id}")
-    public MaintenanceTypeDto getMaintennaceTypeById(@PathVariable("id") Long id) {
+    public MaintenanceTypeDto getMaintennaceTypeById(@PathVariable("id") Long id) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting maintenance type by id - /maintenanceType/{id}");
         return convertToDto(service.findMaintenanceTypeById(id));
     }
 
     @PostMapping
-    public ResponseEntity<MaintenanceTypeDto> postMaintenanceType(@Valid @RequestBody MaintenanceTypeDto maintenanceTypeDto) {
+    public ResponseEntity<MaintenanceTypeDto> postMaintenanceType(@Valid @RequestBody MaintenanceTypeDto maintenanceTypeDto) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Creating maintenance type - /maintenanceType");
         var model = convertToModel(maintenanceTypeDto);
         var maintenanceType = service.createMaintenanceType(model);
 
@@ -70,7 +72,8 @@ public class MaintenanceTypeController {
     }
 
     @PutMapping(value = "/{id}")
-    public void putMaintenanceType(@PathVariable("id") Long id, @Valid @RequestBody MaintenanceTypeDto maintenanceTypeDto) {
+    public void putMaintenanceType(@PathVariable("id") Long id, @Valid @RequestBody MaintenanceTypeDto maintenanceTypeDto) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Updating maintenance type - /maintenanceType/{id}");
         if(!id.equals(maintenanceTypeDto.getId())) throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
                 "id does not match."
@@ -81,7 +84,8 @@ public class MaintenanceTypeController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteMaintenanceTypeById(@PathVariable("id") Long id) {
+    public HttpStatus deleteMaintenanceTypeById(@PathVariable("id") Long id) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Deleting maintenance type by id - /maintenanceType/{id}");
         service.deleteMaintenanceTypeById(id);
         return HttpStatus.NO_CONTENT;
     }

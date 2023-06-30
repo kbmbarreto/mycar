@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.lambdateam.mycar.exception.ExpiredJwtException;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -30,7 +32,7 @@ public class ComponentServiceTest {
     }
 
     @Test
-    public void shouldFindAllComponents() {
+    public void shouldFindAllComponents() throws ExpiredJwtException {
         service.createComponent(componentModel);
 
         Iterable<ComponentModel> componentsList = service.findAllComponents();
@@ -40,7 +42,7 @@ public class ComponentServiceTest {
     }
 
     @Test
-    public void shouldAddComponent() {
+    public void shouldAddComponent() throws ExpiredJwtException {
 
         service.createComponent(componentModel);
 
@@ -51,7 +53,7 @@ public class ComponentServiceTest {
     }
 
     @Test
-    public void shouldUpdateComponent() {
+    public void shouldUpdateComponent() throws ExpiredJwtException {
         ComponentModel savedComponent  = service.createComponent(componentModel);
         savedComponent.setComponent("Óleo de motor");
 
@@ -77,7 +79,7 @@ public class ComponentServiceTest {
     }
 
     @Test
-    public void shouldFindComponentById() {
+    public void shouldFindComponentById() throws ExpiredJwtException {
         ComponentModel savedComponent  = service.createComponent(componentModel);
 
         ComponentModel foundComponent = service.findComponentById(savedComponent.getId());

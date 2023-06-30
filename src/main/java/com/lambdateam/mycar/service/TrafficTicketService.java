@@ -1,5 +1,6 @@
 package com.lambdateam.mycar.service;
 
+import com.lambdateam.mycar.exception.ExpiredJwtException;
 import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.TrafficTicketModel;
 import com.lambdateam.mycar.repository.TrafficTicketRepository;
@@ -14,36 +15,67 @@ public class TrafficTicketService {
 
     private final TrafficTicketRepository repository;
 
-    private TrafficTicketModel findOrThrow(final Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(
-                        () -> new NotFoundException("The traffic ticket id " + id +" was not found.")
-                );
+    private TrafficTicketModel findOrThrow(final Long id) throws ExpiredJwtException {
+        try{
+            return repository
+                    .findById(id)
+                    .orElseThrow(
+                            () -> new NotFoundException("The traffic ticket id " + id +" was not found.")
+                    );
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 
-    public Iterable<TrafficTicketModel> findAllTrafficTickets() {
-        return repository.findAll();
+    public Iterable<TrafficTicketModel> findAllTrafficTickets() throws ExpiredJwtException {
+        try{
+            return repository.findAll();
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 
-    public List<TrafficTicketModel> findAllTrafficTicketsWithDetails() {
-        return repository.getTrafficTicketWithDetails();
+    public List<TrafficTicketModel> findAllTrafficTicketsWithDetails() throws ExpiredJwtException {
+        try{
+            return repository.getTrafficTicketWithDetails();
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 
-    public TrafficTicketModel findTrafficTicketById(Long id) {
-        return findOrThrow(id);
+    public TrafficTicketModel findTrafficTicketById(Long id) throws ExpiredJwtException {
+        try{
+            if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
+            return findOrThrow(id);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 
-    public void deleteTrafficTicketById(Long id) {
-        repository.deleteById(id);
+    public void deleteTrafficTicketById(Long id) throws ExpiredJwtException {
+        try{
+            if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
+            repository.deleteById(id);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 
-    public TrafficTicketModel createTrafficTicket(TrafficTicketModel trafficTicket) {
-        return repository.save(trafficTicket);
+    public TrafficTicketModel createTrafficTicket(TrafficTicketModel trafficTicket) throws ExpiredJwtException {
+        try{
+            return repository.save(trafficTicket);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 
-    public void updateTrafficTicket(Long id, TrafficTicketModel trafficTicket) {
-        findOrThrow(id);
-        repository.save(trafficTicket);
+    public void updateTrafficTicket(Long id, TrafficTicketModel trafficTicket) throws ExpiredJwtException {
+        try{
+            if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
+            findOrThrow(id);
+            repository.save(trafficTicket);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 }
