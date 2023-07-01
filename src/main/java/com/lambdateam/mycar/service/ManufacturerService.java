@@ -33,6 +33,14 @@ public class ManufacturerService {
         }
     }
 
+    public Iterable<ManufacturerModel> dynamicSearchByManufacturer(String manufacturer) throws ExpiredJwtException {
+        try{
+            return repository.dynamicSearchByManufacturer(manufacturer);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
     public ManufacturerModel findManufacturerById(Long id) throws ExpiredJwtException {
         try{
             if(!repository.existsById(id)) throw new NotFoundException("The manufacturer id " + id +" was not found.");

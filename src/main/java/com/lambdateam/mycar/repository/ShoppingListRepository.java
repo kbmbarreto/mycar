@@ -15,6 +15,9 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListModel,
 //            "INNER JOIN s.vehicle v " +
 //            "INNER JOIN s.component c " +
 //            "order by s.id desc")
-@Query(value = "SELECT s FROM ShoppingListModel s order by s.id desc")
+    @Query(value = "SELECT s FROM ShoppingListModel s order by s.id desc")
     List<ShoppingListModel> getShoppingListWithDetails();
+
+    @Query(value = "SELECT s FROM ShoppingListModel s WHERE upper(trim(s.component)) like %?1%")
+    List<ShoppingListModel> dynamicSearchByComponent(String component);
 }

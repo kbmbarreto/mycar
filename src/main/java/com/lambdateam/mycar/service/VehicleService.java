@@ -42,6 +42,14 @@ public class VehicleService {
         }
     }
 
+    public Iterable<VehicleModel> dynamicSearchByDescription(String description) throws ExpiredJwtException {
+        try{
+            return repository.dynamicSearchByDescription(description);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
     public void deleteVehicleById(Long id) throws ExpiredJwtException {
         try{
             if(!repository.existsById(id)) throw new NotFoundException("The vehicle id " + id +" was not found.");

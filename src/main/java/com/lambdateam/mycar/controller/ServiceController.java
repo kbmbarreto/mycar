@@ -72,6 +72,19 @@ public class ServiceController {
         return serviceService.findAllServicesWithDetails();
     }
 
+    @GetMapping(value = "/dynamicSearchByDescription")
+    public List<ServiceDto> dynamicSearchByDescription(@RequestParam("description") String description) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting service list by description - /service/dynamicSearchByDescription");
+        try {
+            return serviceService.dynamicSearchByDescription(description)
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (ExpiredJwtException e) {
+            throw new BadRequestException("Token expired", e);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<ServiceDto> postService(@Valid @RequestBody ServiceDto serviceDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Creating service - /service");

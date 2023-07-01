@@ -52,6 +52,14 @@ public class ShoppingListService {
         }
     }
 
+    public List<ShoppingListModel> dynamicSearchByComponent(String component) throws ExpiredJwtException {
+        try{
+            return repository.dynamicSearchByComponent(component);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
     public void deleteShoppingListItemById(Long id) throws ExpiredJwtException {
         try{
             if(!repository.existsById(id)) throw new NotFoundException("The shopping list item " + id +" was not found.");

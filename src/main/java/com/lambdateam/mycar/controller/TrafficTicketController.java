@@ -63,6 +63,12 @@ public class TrafficTicketController {
         return service.findAllTrafficTicketsWithDetails();
     }
 
+    @GetMapping(value = "/dynamicSearchByDescription")
+    public List<TrafficTicketModel> dynamicSearchByDescription(@RequestParam("description") String description) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting traffic ticket list by description - /trafficTicket/dynamicSearchByDescription");
+        return service.dynamicSearchByDescription(description);
+    }
+
     @PostMapping
     public ResponseEntity<TrafficTicketDto> postTrafficTicket(@Valid @RequestBody TrafficTicketDto trafficTicketDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Posting traffic ticket - /trafficTicket");

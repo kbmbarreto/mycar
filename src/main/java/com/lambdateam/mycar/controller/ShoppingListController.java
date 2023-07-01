@@ -68,6 +68,12 @@ public class ShoppingListController {
         return service.findAllShoppingListWithDetails();
     }
 
+    @GetMapping(value = "/dynamicSearchByComponent")
+    public List<ShoppingListModel> dynamicSearchByComponent(@RequestParam("component") String component) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Dynamic search by component - /shoppingList/dynamicSearchByComponent");
+        return service.dynamicSearchByComponent(component);
+    }
+
     @PostMapping
     public ResponseEntity<ShoppingListDto> postShoppingListItem(@Valid @RequestBody ShoppingListDto shoppingListDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Posting shopping list item - /shoppingList");

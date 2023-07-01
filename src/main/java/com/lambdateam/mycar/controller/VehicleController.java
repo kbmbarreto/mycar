@@ -60,6 +60,19 @@ public class VehicleController {
         return convertToDto(service.findVehicleById(id));
     }
 
+    @GetMapping(value = "/dynamicSearchByDescription")
+    public List<VehicleDto> dynamicSearchByDescription(@RequestParam String description) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Dynamic search by description - /vehicle/dynamicSearchByDescription");
+        var vehiclesList = StreamSupport
+                .stream(service.dynamicSearchByDescription(description).spliterator(), false)
+                .collect(Collectors.toList());
+
+        return vehiclesList
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
     public ResponseEntity<VehicleDto> postVehicle(@Valid @RequestBody VehicleDto vehicleDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Posting vehicle - /vehicle");

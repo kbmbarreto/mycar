@@ -62,6 +62,17 @@ public class MaintenanceTypeController {
         return convertToDto(service.findMaintenanceTypeById(id));
     }
 
+    @GetMapping(value = "/dynamicSearchByMaintenanceType")
+    public List<MaintenanceTypeDto> dynamicSearchByMaintenanceType(@RequestParam("maintenanceType") String maintenanceType) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Dynamic search by maintenance type - /maintenanceType/dynamicSearchByMaintenanceType");
+        var componentList = service.dynamicSearchByMaintenanceType(maintenanceType);
+
+        return componentList
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
     public ResponseEntity<MaintenanceTypeDto> postMaintenanceType(@Valid @RequestBody MaintenanceTypeDto maintenanceTypeDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Creating maintenance type - /maintenanceType");

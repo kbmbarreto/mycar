@@ -1,5 +1,6 @@
 package com.lambdateam.mycar.service;
 
+import com.lambdateam.mycar.dto.WorkshopDto;
 import com.lambdateam.mycar.exception.ExpiredJwtException;
 import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.WorkshopModel;
@@ -37,6 +38,14 @@ public class WorkshopService {
         try{
             if(!repository.existsById(id)) throw new NotFoundException("The workshop id " + id +" was not found.");
             return findOrThrow(id);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
+    public Iterable<WorkshopModel> dynamicSearchByWorkshop(String workshop) throws ExpiredJwtException {
+        try{
+            return repository.dynamicSearchByWorkshop(workshop);
         } catch (Exception e) {
             throw new ExpiredJwtException("You are not authorized to access this resource.");
         }
