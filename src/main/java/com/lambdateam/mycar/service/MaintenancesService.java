@@ -43,6 +43,22 @@ public class MaintenancesService {
         }
     }
 
+    public List<MaintenancesModel> dynamicSearchByNextKm(String nextKm1, String nextKm2) throws ExpiredJwtException {
+        try {
+            return repository.dynamicSearchByNextKm(nextKm1, nextKm2);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
+    public List<MaintenancesModel> dynamicSearchByComponent(String component) throws ExpiredJwtException {
+        try {
+            return repository.dynamicSearchByComponent(component);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
     public MaintenancesModel findMaintenanceById(Long id) throws ExpiredJwtException {
         try {
             return findOrThrow(id);

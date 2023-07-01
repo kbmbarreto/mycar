@@ -43,6 +43,14 @@ public class ServiceService {
         }
     }
 
+    public List<ServiceModel> dynamicSearchByDescription(String description) throws ExpiredJwtException {
+        try{
+            return repository.dynamicSearchByDescription(description);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
     public ServiceModel findServiceById(Long id) throws ExpiredJwtException {
         try{
             if(!repository.existsById(id)) throw new NotFoundException("The service id " + id +" was not found.");

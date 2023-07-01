@@ -64,6 +64,18 @@ public class ComponentController {
         return convertToDto(service.findComponentById(id));
     }
 
+    @GetMapping(value = "/dynamicSearchByComponent")
+    public ResponseEntity<List<ComponentDto>> dynamicSearchByComponent(@RequestParam String component) throws ExpiredJwtException {
+        var componentList = service.dynamicSearchByComponent(component);
+
+        LOGGER.info("SL4J: Dynamic search by component - /component/dynamicSearchByComponent");
+
+        return new ResponseEntity(componentList
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList()), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<ComponentDto> postComponent(@Valid @RequestBody ComponentDto componentDto) throws ExpiredJwtException {
         var model = convertToModel(componentDto);

@@ -58,6 +58,19 @@ public class ManufacturerController {
         return convertToDto(service.findManufacturerById(id));
     }
 
+    @GetMapping(value = "/dynamicSearchByManufacturer")
+    public List<ManufacturerDto> dynamicSearchByManufacturer(@RequestParam String manufacturer) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Dynamic search by manufacturer - /manufacturer/dynamicSearchByManufacturer");
+        var manufacturersList = StreamSupport
+                .stream(service.dynamicSearchByManufacturer(manufacturer).spliterator(), false)
+                .collect(Collectors.toList());
+
+        return manufacturersList
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
     public ResponseEntity<ManufacturerDto> postManufacturer(@Valid @RequestBody ManufacturerDto manufacturerDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Posting manufacturer - /manufacturer");

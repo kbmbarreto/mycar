@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.lambdateam.mycar.exception.ExpiredJwtException;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class MaintenanceTypeService {
@@ -38,6 +40,14 @@ public class MaintenanceTypeService {
         try{
             if(!repository.existsById(id)) throw new NotFoundException("The maintenance type id " + id +" was not found.");
             return findOrThrow(id);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
+    public List<MaintenanceTypeModel> dynamicSearchByMaintenanceType(String maintenanceType) throws ExpiredJwtException {
+        try {
+            return repository.dynamicSearchByMaintenanceType(maintenanceType);
         } catch (Exception e) {
             throw new ExpiredJwtException("You are not authorized to access this resource.");
         }

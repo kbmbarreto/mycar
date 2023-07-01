@@ -62,6 +62,15 @@ public class WorkshopController {
         return convertToDto(service.findWorkshopById(id));
     }
 
+    @GetMapping(value = "/dynamicSearchByWorkshop")
+    public List<WorkshopDto> dynamicSearchByWorkshop(@RequestParam("workshop") String workshop) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting workshop by workshop - /workshop/dynamicSearchByWorkshop");
+        return StreamSupport
+                .stream(service.dynamicSearchByWorkshop(workshop).spliterator(), false)
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping
     public ResponseEntity<WorkshopDto> postWorkshop(@Valid @RequestBody WorkshopDto workshopDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Posting workshop - /workshop");

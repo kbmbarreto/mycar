@@ -43,6 +43,14 @@ public class TrafficTicketService {
         }
     }
 
+    public List<TrafficTicketModel> dynamicSearchByDescription(String description) throws ExpiredJwtException {
+        try{
+            return repository.dynamicSearchByDescription(description);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
+    }
+
     public TrafficTicketModel findTrafficTicketById(Long id) throws ExpiredJwtException {
         try{
             if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");

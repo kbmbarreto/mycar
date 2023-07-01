@@ -17,4 +17,7 @@ public interface ServiceRepository extends JpaRepository<ServiceModel, Long> {
 //            "order by s.id desc")
     @Query(value = "SELECT s FROM ServiceModel s order by s.id desc")
     List<ServiceModel> getServicesWithDetails();
+
+    @Query(value = "SELECT s FROM ServiceModel s WHERE upper(trim(s.description)) like %?1%")
+    List<ServiceModel> dynamicSearchByDescription(String description);
 }

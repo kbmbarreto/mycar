@@ -6,7 +6,7 @@ import com.lambdateam.mycar.repository.ComponentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.lambdateam.mycar.exception.ExpiredJwtException;;
+import com.lambdateam.mycar.exception.ExpiredJwtException;;import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -37,6 +37,14 @@ public class ComponentService {
     public ComponentModel findComponentById(Long id) throws ExpiredJwtException {
         if(!repository.existsById(id)) throw new NotFoundException("The component id " + id +" was not found.");
         return findOrThrow(id);
+    }
+
+    public List<ComponentModel> dynamicSearchByComponent(String component) throws ExpiredJwtException {
+        try {
+            return repository.dynamicSearchByComponent(component);
+        } catch (Exception e) {
+            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        }
     }
 
     public void deleteComponentById(Long id) {

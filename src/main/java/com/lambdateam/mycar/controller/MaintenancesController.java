@@ -64,6 +64,18 @@ public class MaintenancesController {
         return service.findAllMaintenancesWithDetails();
     }
 
+    @GetMapping(value = "/dynamicSearchByNextKm")
+    public List<MaintenancesModel> dynamicSearchByNextKm(@RequestParam("nextKm1") String nextKm1, @RequestParam("nextKm2") String nextKm2) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting maintenance item - /maintenances/dynamicSearchByNextKm");
+        return service.dynamicSearchByNextKm(nextKm1, nextKm2);
+    }
+
+    @GetMapping(value = "/dynamicSearchByComponent")
+    public List<MaintenancesModel> dynamicSearchByComponent(@RequestParam("component") String component) throws ExpiredJwtException {
+        LOGGER.info("SL4J: Getting maintenance item - /maintenances/dynamicSearchByComponent");
+        return service.dynamicSearchByComponent(component);
+    }
+
     @PostMapping
     public ResponseEntity<MaintenancesDto> postMaintenance(@Valid @RequestBody MaintenancesDto maintenancesDto) throws ExpiredJwtException {
         var model = convertToModel(maintenancesDto);
