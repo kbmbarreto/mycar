@@ -25,7 +25,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/manufacturer")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("Manufacturer")
 public class ManufacturerController {
 
     private final ManufacturerService service;

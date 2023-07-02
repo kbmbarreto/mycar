@@ -25,7 +25,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/component")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("Component")
 public class ComponentController {
 
     private final ComponentService service;

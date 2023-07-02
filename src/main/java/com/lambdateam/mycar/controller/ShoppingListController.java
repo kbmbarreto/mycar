@@ -24,7 +24,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/shoppingList")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("ShoppingList")
 public class ShoppingListController {
 
     private final ShoppingListService service;

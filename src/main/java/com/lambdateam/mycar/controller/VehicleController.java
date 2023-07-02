@@ -24,7 +24,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/vehicle")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("Vehicle")
 public class VehicleController {
 
     private final VehicleService service;

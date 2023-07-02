@@ -24,7 +24,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/trafficTicket")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("TrafficTicket")
 public class TrafficTicketController {
 
     private final TrafficTicketService service;

@@ -26,7 +26,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/service")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("Service")
 public class ServiceController {
 
     private final ServiceService serviceService;

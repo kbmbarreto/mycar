@@ -24,7 +24,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/workshop")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("Workshop")
 public class WorkshopController {
 
     private final WorkshopService service;
