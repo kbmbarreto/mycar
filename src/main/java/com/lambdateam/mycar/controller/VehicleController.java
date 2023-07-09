@@ -2,6 +2,7 @@ package com.lambdateam.mycar.controller;
 
 import com.lambdateam.mycar.dto.VehicleDto;
 import com.lambdateam.mycar.exception.ExpiredJwtException;
+import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.VehicleModel;
 import com.lambdateam.mycar.service.VehicleService;
 import lombok.AllArgsConstructor;
@@ -38,66 +39,138 @@ public class VehicleController {
     }
 
     @GetMapping
-    public List<VehicleDto> getVehicles(Pageable pageable) throws ExpiredJwtException {
+    public List<VehicleDto> getVehicles(Pageable pageable) throws ExpiredJwtException, NotFoundException, ResponseStatusException {
         LOGGER.info("SL4J: Getting vehicle list - /vehicle");
-        int toSkip = pageable.getPageSize() *
-                pageable.getPageNumber();
+        try{
+            int toSkip = pageable.getPageSize() *
+                    pageable.getPageNumber();
 
-        var vehiclesList = StreamSupport
-                .stream(service.findAllVehicles().spliterator(), false)
-                .skip(toSkip).limit(pageable.getPageSize())
-                .collect(Collectors.toList());
+            var vehiclesList = StreamSupport
+                    .stream(service.findAllVehicles().spliterator(), false)
+                    .skip(toSkip).limit(pageable.getPageSize())
+                    .collect(Collectors.toList());
 
-        return vehiclesList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+            return vehiclesList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid page number or page size."
+            );
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "No vehicles found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @GetMapping(value = "/{id}")
-    public VehicleDto getVehicleById(@PathVariable("id") Long id) throws ExpiredJwtException {
+    public VehicleDto getVehicleById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
         LOGGER.info("SL4J: Getting vehicle by id - /vehicle/{id}");
-        return convertToDto(service.findVehicleById(id));
+        try{
+            return convertToDto(service.findVehicleById(id));
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "Vehicle not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @GetMapping(value = "/dynamicSearchByDescription")
-    public List<VehicleDto> dynamicSearchByDescription(@RequestParam String description) throws ExpiredJwtException {
+    public List<VehicleDto> dynamicSearchByDescription(@RequestParam String description) throws ExpiredJwtException, NotFoundException {
         LOGGER.info("SL4J: Dynamic search by description - /vehicle/dynamicSearchByDescription");
-        var vehiclesList = StreamSupport
-                .stream(service.dynamicSearchByDescription(description).spliterator(), false)
-                .collect(Collectors.toList());
+        try{
+            var vehiclesList = StreamSupport
+                    .stream(service.dynamicSearchByDescription(description).spliterator(), false)
+                    .collect(Collectors.toList());
 
-        return vehiclesList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+            return vehiclesList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "No vehicles found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @PostMapping
     public ResponseEntity<VehicleDto> postVehicle(@Valid @RequestBody VehicleDto vehicleDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Posting vehicle - /vehicle");
-        var model = convertToModel(vehicleDto);
-        var vehicle = service.createVehicle(model);
+        try{
+            var model = convertToModel(vehicleDto);
+            var vehicle = service.createVehicle(model);
 
-        return new ResponseEntity(convertToDto(vehicle), HttpStatus.CREATED);
+            return new ResponseEntity(convertToDto(vehicle), HttpStatus.CREATED);
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @PutMapping(value = "/{id}")
-    public void putVehicle(@PathVariable("id") Long id, @Valid @RequestBody VehicleDto vehicleDto) throws ExpiredJwtException {
+    public void putVehicle(@PathVariable("id") Long id, @Valid @RequestBody VehicleDto vehicleDto) throws ExpiredJwtException, NotFoundException {
         LOGGER.info("SL4J: Putting vehicle - /vehicle/{id}");
-        if(!id.equals(vehicleDto.getId())) throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "id does not match."
-        );
+        try{
+            if(!id.equals(vehicleDto.getId())) throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "id does not match."
+            );
 
-        var vehicleModel = convertToModel(vehicleDto);
-        service.updateVehicle(id, vehicleModel);
+            var vehicleModel = convertToModel(vehicleDto);
+            service.updateVehicle(id, vehicleModel);
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "Vehicle not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteVehicleById(@PathVariable("id") Long id) throws ExpiredJwtException {
+    public HttpStatus deleteVehicleById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
         LOGGER.info("SL4J: Deleting vehicle by id - /vehicle/{id}");
-        service.deleteVehicleById(id);
-        return HttpStatus.NO_CONTENT;
+        try{
+            service.deleteVehicleById(id);
+            return HttpStatus.NO_CONTENT;
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "Vehicle not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 }

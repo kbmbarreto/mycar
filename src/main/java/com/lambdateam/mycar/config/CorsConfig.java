@@ -1,8 +1,6 @@
 package com.lambdateam.mycar.config;
 
 import java.util.Arrays;
-import java.util.Collections;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -12,20 +10,11 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class CorsConfig {
 
-//    final AppProperties appProperties;
-//
-//    public CorsConfig(AppProperties appProperties) {
-//        this.appProperties = appProperties;
-//    }
-//
-//    @Value("${client.url}")
-//    private String CLIENT_URL;
-
     @Bean
     CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8003/mycar/v1/login", "http://localhost:4200/login", "http://localhost:4200"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8003/mycar/v1/login", "http://localhost:4200", "*"));
         corsConfiguration.setAllowedHeaders(
                 Arrays.asList(
                         "Origin",
@@ -51,7 +40,7 @@ public class CorsConfig {
                 )
         );
         corsConfiguration.setAllowedMethods(
-                Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         );
         var urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration(

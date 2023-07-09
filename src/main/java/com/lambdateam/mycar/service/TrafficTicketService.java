@@ -1,6 +1,5 @@
 package com.lambdateam.mycar.service;
 
-import com.lambdateam.mycar.exception.ExpiredJwtException;
 import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.TrafficTicketModel;
 import com.lambdateam.mycar.repository.TrafficTicketRepository;
@@ -15,75 +14,59 @@ public class TrafficTicketService {
 
     private final TrafficTicketRepository repository;
 
-    private TrafficTicketModel findOrThrow(final Long id) throws ExpiredJwtException {
-        try{
-            return repository
-                    .findById(id)
-                    .orElseThrow(
-                            () -> new NotFoundException("The traffic ticket id " + id +" was not found.")
-                    );
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    private TrafficTicketModel findOrThrow(final Long id) throws NotFoundException {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("The traffic ticket id " + id +" was not found.")
+                );
     }
 
-    public Iterable<TrafficTicketModel> findAllTrafficTickets() throws ExpiredJwtException {
+    public Iterable<TrafficTicketModel> findAllTrafficTickets() throws NotFoundException {
         try{
             return repository.findAll();
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public List<TrafficTicketModel> findAllTrafficTicketsWithDetails() throws ExpiredJwtException {
+    public List<TrafficTicketModel> findAllTrafficTicketsWithDetails() throws NotFoundException {
         try{
             return repository.getTrafficTicketWithDetails();
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public List<TrafficTicketModel> dynamicSearchByDescription(String description) throws ExpiredJwtException {
+    public List<TrafficTicketModel> dynamicSearchByDescription(String description) throws NotFoundException {
         try{
             return repository.dynamicSearchByDescription(description);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public TrafficTicketModel findTrafficTicketById(Long id) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
-            return findOrThrow(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public TrafficTicketModel findTrafficTicketById(Long id) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
+        return findOrThrow(id);
     }
 
-    public void deleteTrafficTicketById(Long id) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
-            repository.deleteById(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public void deleteTrafficTicketById(Long id) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
+        repository.deleteById(id);
     }
 
-    public TrafficTicketModel createTrafficTicket(TrafficTicketModel trafficTicket) throws ExpiredJwtException {
+    public TrafficTicketModel createTrafficTicket(TrafficTicketModel trafficTicket) throws NotFoundException {
         try{
             return repository.save(trafficTicket);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public void updateTrafficTicket(Long id, TrafficTicketModel trafficTicket) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
-            findOrThrow(id);
-            repository.save(trafficTicket);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public void updateTrafficTicket(Long id, TrafficTicketModel trafficTicket) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The traffic ticket id " + id +" was not found.");
+        findOrThrow(id);
+        repository.save(trafficTicket);
     }
 }

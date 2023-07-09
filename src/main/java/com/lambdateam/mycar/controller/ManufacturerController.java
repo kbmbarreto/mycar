@@ -2,6 +2,7 @@ package com.lambdateam.mycar.controller;
 
 import com.lambdateam.mycar.dto.ManufacturerDto;
 import com.lambdateam.mycar.exception.ExpiredJwtException;
+import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.ManufacturerModel;
 import com.lambdateam.mycar.service.ManufacturerService;
 import lombok.AllArgsConstructor;
@@ -36,66 +37,111 @@ public class ManufacturerController {
 
 
     @GetMapping
-    public List<ManufacturerDto> getManufacturers(Pageable pageable) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Getting manufacturer list - /manufacturer");
-        int toSkip = pageable.getPageSize() *
-                pageable.getPageNumber();
+    public List<ManufacturerDto> getManufacturers(Pageable pageable) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Getting manufacturer list - /manufacturer");
+            int toSkip = pageable.getPageSize() *
+                    pageable.getPageNumber();
 
-        var manufacturersList = StreamSupport
-                .stream(service.findAllManufacturers().spliterator(), false)
-                .skip(toSkip).limit(pageable.getPageSize())
-                .collect(Collectors.toList());
+            var manufacturersList = StreamSupport
+                    .stream(service.findAllManufacturers().spliterator(), false)
+                    .skip(toSkip).limit(pageable.getPageSize())
+                    .collect(Collectors.toList());
 
-        return manufacturersList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+            return manufacturersList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        }  catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @GetMapping(value = "/{id}")
-    public ManufacturerDto getManufacturerById(@PathVariable("id") Long id) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Getting manufacturer by id - /manufacturer/{/id}");
-        return convertToDto(service.findManufacturerById(id));
+    public ManufacturerDto getManufacturerById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Getting manufacturer by id - /manufacturer/{/id}");
+            return convertToDto(service.findManufacturerById(id));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @GetMapping(value = "/dynamicSearchByManufacturer")
-    public List<ManufacturerDto> dynamicSearchByManufacturer(@RequestParam String manufacturer) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Dynamic search by manufacturer - /manufacturer/dynamicSearchByManufacturer");
-        var manufacturersList = StreamSupport
-                .stream(service.dynamicSearchByManufacturer(manufacturer).spliterator(), false)
-                .collect(Collectors.toList());
+    public List<ManufacturerDto> dynamicSearchByManufacturer(@RequestParam String manufacturer) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Dynamic search by manufacturer - /manufacturer/dynamicSearchByManufacturer");
+            var manufacturersList = StreamSupport
+                    .stream(service.dynamicSearchByManufacturer(manufacturer).spliterator(), false)
+                    .collect(Collectors.toList());
 
-        return manufacturersList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+            return manufacturersList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @PostMapping
     public ResponseEntity<ManufacturerDto> postManufacturer(@Valid @RequestBody ManufacturerDto manufacturerDto) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Posting manufacturer - /manufacturer");
-        var model = convertToModel(manufacturerDto);
-        var manufacturer = service.createManufacturer(model);
+        try{
+            LOGGER.info("SL4J: Posting manufacturer - /manufacturer");
+            var model = convertToModel(manufacturerDto);
+            var manufacturer = service.createManufacturer(model);
 
-        return new ResponseEntity(convertToDto(manufacturer), HttpStatus.CREATED);
+            return new ResponseEntity(convertToDto(manufacturer), HttpStatus.CREATED);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @PutMapping(value = "/{id}")
-    public void putManufacturer(@PathVariable("id") Long id, @Valid @RequestBody ManufacturerDto manufacturerDto) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Putting manufacturer - /manufacturer/{/id}");
-        if(!id.equals(manufacturerDto.getId())) throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "id does not match."
-        );
+    public void putManufacturer(@PathVariable("id") Long id, @Valid @RequestBody ManufacturerDto manufacturerDto) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Putting manufacturer - /manufacturer/{/id}");
+            if(!id.equals(manufacturerDto.getId())) throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "id does not match."
+            );
 
-        var manufacturerModel = convertToModel(manufacturerDto);
-        service.updateManufacturer(id, manufacturerModel);
+            var manufacturerModel = convertToModel(manufacturerDto);
+            service.updateManufacturer(id, manufacturerModel);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteManufacturerById(@PathVariable("id") Long id) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Deleting manufacturer by id - /manufacturer/{/id}");
-        service.deleteManufacturerById(id);
-        return HttpStatus.NO_CONTENT;
+    public HttpStatus deleteManufacturerById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Deleting manufacturer by id - /manufacturer/{/id}");
+            service.deleteManufacturerById(id);
+            return HttpStatus.NO_CONTENT;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 }

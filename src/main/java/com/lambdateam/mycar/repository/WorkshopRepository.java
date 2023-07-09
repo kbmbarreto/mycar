@@ -1,6 +1,5 @@
 package com.lambdateam.mycar.repository;
 
-import com.lambdateam.mycar.dto.WorkshopDto;
 import com.lambdateam.mycar.model.WorkshopModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

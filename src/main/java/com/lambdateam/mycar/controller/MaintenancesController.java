@@ -1,6 +1,7 @@
 package com.lambdateam.mycar.controller;
 
 import com.lambdateam.mycar.dto.MaintenancesDto;
+import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.MaintenancesModel;
 import com.lambdateam.mycar.service.MaintenancesService;
 import lombok.AllArgsConstructor;
@@ -35,74 +36,135 @@ public class MaintenancesController {
     private MaintenancesModel convertToModel(MaintenancesDto dto) { return mapper.map(dto, MaintenancesModel.class); }
 
     @GetMapping
-    public List<MaintenancesDto> getMaintenances(Pageable pageable) throws ExpiredJwtException {
-        int toSkip = pageable.getPageSize() *
-                pageable.getPageNumber();
+    public List<MaintenancesDto> getMaintenances(Pageable pageable) throws ExpiredJwtException, NotFoundException {
+        try{
+            int toSkip = pageable.getPageSize() *
+                    pageable.getPageNumber();
 
-        LOGGER.info("SL4J: Getting maintenances list - /maintenances");
+            LOGGER.info("SL4J: Getting maintenances list - /maintenances");
 
-        var maintenancesList = StreamSupport
-                .stream(service.findAllMaintenances().spliterator(), false)
-                .skip(toSkip).limit(pageable.getPageSize())
-                .collect(Collectors.toList());
+            var maintenancesList = StreamSupport
+                    .stream(service.findAllMaintenances().spliterator(), false)
+                    .skip(toSkip).limit(pageable.getPageSize())
+                    .collect(Collectors.toList());
 
-        return maintenancesList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+            return maintenancesList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenances not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @GetMapping(value = "/{id}")
-    public MaintenancesDto getMaintenanceById(@PathVariable("id") Long id) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Getting maintenance item - /maintenances/{id}");
-        return convertToDto(service.findMaintenanceById(id));
+    public MaintenancesDto getMaintenanceById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Getting maintenance item - /maintenances/{id}");
+            return convertToDto(service.findMaintenanceById(id));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @GetMapping(value = "/withDetails")
-    public List<MaintenancesModel> getAllMaintenancesWithDetails() throws ExpiredJwtException {
-        LOGGER.info("SL4J: Getting maintenance item - /maintenances/withDetails");
-        return service.findAllMaintenancesWithDetails();
+    public List<MaintenancesModel> getAllMaintenancesWithDetails() throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Getting maintenance item - /maintenances/withDetails");
+            return service.findAllMaintenancesWithDetails();
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @GetMapping(value = "/dynamicSearchByNextKm")
-    public List<MaintenancesModel> dynamicSearchByNextKm(@RequestParam("nextKm1") String nextKm1, @RequestParam("nextKm2") String nextKm2) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Getting maintenance item - /maintenances/dynamicSearchByNextKm");
-        return service.dynamicSearchByNextKm(nextKm1, nextKm2);
+    public List<MaintenancesModel> dynamicSearchByNextKm(@RequestParam("nextKm1") String nextKm1, @RequestParam("nextKm2") String nextKm2) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Getting maintenance item - /maintenances/dynamicSearchByNextKm");
+            return service.dynamicSearchByNextKm(nextKm1, nextKm2);
+        }  catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @GetMapping(value = "/dynamicSearchByComponent")
-    public List<MaintenancesModel> dynamicSearchByComponent(@RequestParam("component") String component) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Getting maintenance item - /maintenances/dynamicSearchByComponent");
-        return service.dynamicSearchByComponent(component);
+    public List<MaintenancesModel> dynamicSearchByComponent(@RequestParam("component") String component) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Getting maintenance item - /maintenances/dynamicSearchByComponent");
+            return service.dynamicSearchByComponent(component);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @PostMapping
     public ResponseEntity<MaintenancesDto> postMaintenance(@Valid @RequestBody MaintenancesDto maintenancesDto) throws ExpiredJwtException {
-        var model = convertToModel(maintenancesDto);
-        var maintenance = service.createMaintenance(model);
+        try{
+            var model = convertToModel(maintenancesDto);
+            var maintenance = service.createMaintenance(model);
 
-        LOGGER.info("SL4J: Creating maintenance item - /maintenances");
+            LOGGER.info("SL4J: Creating maintenance item - /maintenances");
 
-        return new ResponseEntity(convertToDto(maintenance), HttpStatus.CREATED);
+            return new ResponseEntity(convertToDto(maintenance), HttpStatus.CREATED);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @PutMapping(value = "/{id}")
-    public void putMaintenance(@PathVariable("id") Long id, @Valid @RequestBody MaintenancesDto maintenancesDto) throws ExpiredJwtException {
-        if(!id.equals(maintenancesDto.getId())) throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "id does not match."
-        );
+    public void putMaintenance(@PathVariable("id") Long id, @Valid @RequestBody MaintenancesDto maintenancesDto) throws ExpiredJwtException, NotFoundException {
+        try{
+            if(!id.equals(maintenancesDto.getId())) throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "id does not match."
+            );
 
-        LOGGER.info("SL4J: Updating maintenance item - /maintenances/{id}");
+            LOGGER.info("SL4J: Updating maintenance item - /maintenances/{id}");
 
-        var maintenancesModel = convertToModel(maintenancesDto);
-        service.updateMaintenance(id, maintenancesModel);
+            var maintenancesModel = convertToModel(maintenancesDto);
+            service.updateMaintenance(id, maintenancesModel);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteMaintenanceById(@PathVariable("id") Long id) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Deleting maintenance item - /maintenances/{id}");
-        service.deleteMaintenanceById(id);
-        return HttpStatus.NO_CONTENT;
+    public HttpStatus deleteMaintenanceById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Deleting maintenance item - /maintenances/{id}");
+            service.deleteMaintenanceById(id);
+            return HttpStatus.NO_CONTENT;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Maintenance not found", e);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        }
     }
 }

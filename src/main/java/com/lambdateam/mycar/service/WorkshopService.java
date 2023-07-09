@@ -1,7 +1,5 @@
 package com.lambdateam.mycar.service;
 
-import com.lambdateam.mycar.dto.WorkshopDto;
-import com.lambdateam.mycar.exception.ExpiredJwtException;
 import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.WorkshopModel;
 import com.lambdateam.mycar.repository.WorkshopRepository;
@@ -14,67 +12,47 @@ public class WorkshopService {
 
     private final WorkshopRepository repository;
 
-    private WorkshopModel findOrThrow(final Long id) throws ExpiredJwtException {
-        try{
-            return repository
-                    .findById(id)
-                    .orElseThrow(
-                            () -> new NotFoundException("The workshop id " + id +" was not found.")
-                    );
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    private WorkshopModel findOrThrow(final Long id) throws NotFoundException {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("The workshop id " + id +" was not found.")
+                );
     }
 
-    public Iterable<WorkshopModel> findAllWorkshops() throws ExpiredJwtException {
+    public Iterable<WorkshopModel> findAllWorkshops() throws NotFoundException {
         try{
             return repository.findAll();
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public WorkshopModel findWorkshopById(Long id) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The workshop id " + id +" was not found.");
-            return findOrThrow(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public WorkshopModel findWorkshopById(Long id) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The workshop id " + id +" was not found.");
+        return findOrThrow(id);
     }
 
-    public Iterable<WorkshopModel> dynamicSearchByWorkshop(String workshop) throws ExpiredJwtException {
+    public Iterable<WorkshopModel> dynamicSearchByWorkshop(String workshop) throws NotFoundException {
         try{
             return repository.dynamicSearchByWorkshop(workshop);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public void deleteWorkshopById(Long id) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The workshop id " + id +" was not found.");
-            repository.deleteById(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public void deleteWorkshopById(Long id) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The workshop id " + id +" was not found.");
+        repository.deleteById(id);
     }
 
-    public WorkshopModel createWorkshop(WorkshopModel workshop) throws ExpiredJwtException {
-        try{
-            return repository.save(workshop);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public WorkshopModel createWorkshop(WorkshopModel workshop) {
+        return repository.save(workshop);
     }
 
-    public void updateWorkshop(Long id, WorkshopModel workshop) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The workshop id " + id +" was not found.");
-            findOrThrow(id);
-            repository.save(workshop);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public void updateWorkshop(Long id, WorkshopModel workshop) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The workshop id " + id +" was not found.");
+        findOrThrow(id);
+        repository.save(workshop);
     }
 }

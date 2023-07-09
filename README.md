@@ -13,7 +13,7 @@
 - Redis (for caching)
 - Oracle MySQL
 - H2 database (for using in tests)
-- JUnit 5
+- JUnit 4
 - Mockito
 - OpenAPI (Swagger)
 - Lombok

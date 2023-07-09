@@ -17,5 +17,6 @@ public class TrafficTicketDto {
     @NotNull(message = "Date is required")
     private Date date;
     private String notes;
+    @NotNull(message = "Vehicle is required")
     private VehicleModel vehicle;
 }

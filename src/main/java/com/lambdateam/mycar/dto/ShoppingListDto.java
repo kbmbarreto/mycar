@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.VehicleModel;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -16,5 +17,6 @@ public class ShoppingListDto {
     @NotNull(message = "Fullfiled is required")
     private Boolean fullfiled;
     private VehicleModel vehicle;
+    @NotBlank(message = "Component is required")
     private ComponentModel component;
 }

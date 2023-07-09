@@ -6,7 +6,6 @@ import com.lambdateam.mycar.repository.MaintenancesRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.lambdateam.mycar.exception.ExpiredJwtException;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,82 +14,67 @@ public class MaintenancesService {
 
     private final MaintenancesRepository repository;
 
-    private MaintenancesModel findOrThrow(final Long id) throws ExpiredJwtException {
-        try{
-            return repository
-                    .findById(id)
-                    .orElseThrow(
-                            () -> new NotFoundException("The maintenance id " + id +" was not found.")
-                    );
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    private MaintenancesModel findOrThrow(final Long id) throws NotFoundException {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("The maintenance id " + id +" was not found.")
+                );
     }
 
-    public List<MaintenancesModel> findAllMaintenancesWithDetails() throws ExpiredJwtException {
+    public List<MaintenancesModel> findAllMaintenancesWithDetails() throws NotFoundException {
         try {
             return repository.getMaintenancesWithDetails();
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public Iterable<MaintenancesModel> findAllMaintenances() throws ExpiredJwtException{
+    public Iterable<MaintenancesModel> findAllMaintenances() throws NotFoundException{
         try {
             return repository.findAll();
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public List<MaintenancesModel> dynamicSearchByNextKm(String nextKm1, String nextKm2) throws ExpiredJwtException {
+    public List<MaintenancesModel> dynamicSearchByNextKm(String nextKm1, String nextKm2) throws NotFoundException {
         try {
             return repository.dynamicSearchByNextKm(nextKm1, nextKm2);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public List<MaintenancesModel> dynamicSearchByComponent(String component) throws ExpiredJwtException {
+    public List<MaintenancesModel> dynamicSearchByComponent(String component) throws NotFoundException {
         try {
             return repository.dynamicSearchByComponent(component);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public MaintenancesModel findMaintenanceById(Long id) throws ExpiredJwtException {
+    public MaintenancesModel findMaintenanceById(Long id) throws NotFoundException {
         try {
             return findOrThrow(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public void deleteMaintenanceById(Long id) throws ExpiredJwtException {
-        try {
+    public void deleteMaintenanceById(Long id) throws NotFoundException {
             if(!repository.existsById(id)) throw new NotFoundException("The maintenance id " + id +" was not found.");
             repository.deleteById(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+
     }
 
-    public MaintenancesModel createMaintenance(MaintenancesModel maintenance) throws ExpiredJwtException {
-        try {
-            return repository.save(maintenance);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public MaintenancesModel createMaintenance(MaintenancesModel maintenance) {
+        return repository.save(maintenance);
     }
 
-    public void updateMaintenance(Long id, MaintenancesModel maintenance) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The maintenance id " + id +" was not found.");
-            findOrThrow(id);
-            repository.save(maintenance);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public void updateMaintenance(Long id, MaintenancesModel maintenance) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The maintenance id " + id +" was not found.");
+        findOrThrow(id);
+        repository.save(maintenance);
     }
 }
