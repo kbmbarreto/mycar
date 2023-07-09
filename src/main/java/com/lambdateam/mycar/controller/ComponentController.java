@@ -1,6 +1,7 @@
 package com.lambdateam.mycar.controller;
 
 import com.lambdateam.mycar.dto.ComponentDto;
+import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.ComponentModel;
 import com.lambdateam.mycar.service.ComponentService;
 import lombok.AllArgsConstructor;
@@ -39,72 +40,137 @@ public class ComponentController {
     }
 
     @GetMapping
-    public List<ComponentDto> getComponents(Pageable pageable) throws ExpiredJwtException {
-        int toSkip = pageable.getPageSize() *
-                     pageable.getPageNumber();
+    public List<ComponentDto> getComponents(Pageable pageable) throws ExpiredJwtException, NotFoundException {
+        try{
+            int toSkip = pageable.getPageSize() *
+                    pageable.getPageNumber();
 
-        LOGGER.info("SL4J: Getting component list - /component");
+            LOGGER.info("SL4J: Getting component list - /component");
 
-        var componentList = StreamSupport
-                .stream(service.findAllComponents().spliterator(), false)
-                .skip(toSkip).limit(pageable.getPageSize())
-                .collect(Collectors.toList());
+            var componentList = StreamSupport
+                    .stream(service.findAllComponents().spliterator(), false)
+                    .skip(toSkip).limit(pageable.getPageSize())
+                    .collect(Collectors.toList());
 
-        return componentList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+            return componentList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "No components found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid token."
+            );
+        }
     }
 
     @GetMapping(value = "/{id}")
-    public ComponentDto getComponentById(@PathVariable("id") Long id) throws ExpiredJwtException {
+    public ComponentDto getComponentById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Getting component item - /component/{id}");
 
-        LOGGER.info("SL4J: Getting component item - /component/{id}");
-
-        return convertToDto(service.findComponentById(id));
+            return convertToDto(service.findComponentById(id));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Component not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid token."
+            );
+        }
     }
 
     @GetMapping(value = "/dynamicSearchByComponent")
-    public ResponseEntity<List<ComponentDto>> dynamicSearchByComponent(@RequestParam String component) throws ExpiredJwtException {
-        var componentList = service.dynamicSearchByComponent(component);
+    public ResponseEntity<List<ComponentDto>> dynamicSearchByComponent(@RequestParam String component) throws ExpiredJwtException, NotFoundException {
+        try{
+            var componentList = service.dynamicSearchByComponent(component);
 
-        LOGGER.info("SL4J: Dynamic search by component - /component/dynamicSearchByComponent");
+            LOGGER.info("SL4J: Dynamic search by component - /component/dynamicSearchByComponent");
 
-        return new ResponseEntity(componentList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList()), HttpStatus.OK);
+            return new ResponseEntity(componentList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList()), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "No components found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid token."
+            );
+        }
     }
 
     @PostMapping
     public ResponseEntity<ComponentDto> postComponent(@Valid @RequestBody ComponentDto componentDto) throws ExpiredJwtException {
-        var model = convertToModel(componentDto);
-        var component = service.createComponent(model);
+        try{
+            var model = convertToModel(componentDto);
+            var component = service.createComponent(model);
 
-        LOGGER.info("SL4J: Post component - /component");
+            LOGGER.info("SL4J: Post component - /component");
 
-        return new ResponseEntity(convertToDto(component), HttpStatus.CREATED);
+            return new ResponseEntity(convertToDto(component), HttpStatus.CREATED);
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid token."
+            );
+        }
     }
 
     @PutMapping(value = "/{id}")
-    public void putComponent(@PathVariable("id") Long id, @Valid @RequestBody ComponentDto componentDto) throws ExpiredJwtException {
-        if(!id.equals(componentDto.getId())) throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "id does not match."
-        );
+    public void putComponent(@PathVariable("id") Long id, @Valid @RequestBody ComponentDto componentDto) throws ExpiredJwtException, NotFoundException {
+        try{
+            if(!id.equals(componentDto.getId())) throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "id does not match."
+            );
 
-        LOGGER.info("SL4J: Updating component - /component/{id}");
+            LOGGER.info("SL4J: Updating component - /component/{id}");
 
-        var componentModel = convertToModel(componentDto);
-        service.updateComponent(id, componentModel);
+            var componentModel = convertToModel(componentDto);
+            service.updateComponent(id, componentModel);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Component not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid token."
+            );
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteComponentById(@PathVariable("id") Long id) {
+    public HttpStatus deleteComponentById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
+        try{
+            LOGGER.info("SL4J: Deleting component - /component/{id}");
 
-        LOGGER.info("SL4J: Deleting component - /component/{id}");
-
-        service.deleteComponentById(id);
-        return HttpStatus.NO_CONTENT;
+            service.deleteComponentById(id);
+            return HttpStatus.NO_CONTENT;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Component not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid token."
+            );
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.lambdateam.mycar.controller;
 
 import com.lambdateam.mycar.dto.WorkshopDto;
 import com.lambdateam.mycar.exception.ExpiredJwtException;
+import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.WorkshopModel;
 import com.lambdateam.mycar.service.WorkshopService;
 import lombok.AllArgsConstructor;
@@ -38,64 +39,136 @@ public class WorkshopController {
     }
 
     @GetMapping
-    public List<WorkshopDto> getWorkshops(Pageable pageable) throws ExpiredJwtException {
+    public List<WorkshopDto> getWorkshops(Pageable pageable) throws ExpiredJwtException, ResponseStatusException, NotFoundException {
 
         LOGGER.info("SL4J: Getting workshop list - /workshop");
 
-        int toSkip = pageable.getPageSize() *
-                pageable.getPageNumber();
+        try{
+            int toSkip = pageable.getPageSize() *
+                    pageable.getPageNumber();
 
-        var workshopsList = StreamSupport
-                .stream(service.findAllWorkshops().spliterator(), false)
-                .skip(toSkip).limit(pageable.getPageSize())
-                .collect(Collectors.toList());
+            var workshopsList = StreamSupport
+                    .stream(service.findAllWorkshops().spliterator(), false)
+                    .skip(toSkip).limit(pageable.getPageSize())
+                    .collect(Collectors.toList());
 
-        return workshopsList
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+            return workshopsList
+                    .stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Invalid page number or page size."
+            );
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "No workshops found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @GetMapping(value = "/{id}")
-    public WorkshopDto getWorkshopById(@PathVariable("id") Long id) throws ExpiredJwtException {
+    public WorkshopDto getWorkshopById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException {
         LOGGER.info("SL4J: Getting workshop by id - /workshop/{id}");
-        return convertToDto(service.findWorkshopById(id));
+        try{
+            return convertToDto(service.findWorkshopById(id));
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "Workshop not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @GetMapping(value = "/dynamicSearchByWorkshop")
-    public List<WorkshopDto> dynamicSearchByWorkshop(@RequestParam("workshop") String workshop) throws ExpiredJwtException {
+    public List<WorkshopDto> dynamicSearchByWorkshop(@RequestParam("workshop") String workshop) throws ExpiredJwtException, NotFoundException {
         LOGGER.info("SL4J: Getting workshop by workshop - /workshop/dynamicSearchByWorkshop");
-        return StreamSupport
-                .stream(service.dynamicSearchByWorkshop(workshop).spliterator(), false)
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        try{
+            return StreamSupport
+                    .stream(service.dynamicSearchByWorkshop(workshop).spliterator(), false)
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "Workshop not found."
+            );
+        }
     }
 
     @PostMapping
     public ResponseEntity<WorkshopDto> postWorkshop(@Valid @RequestBody WorkshopDto workshopDto) throws ExpiredJwtException {
         LOGGER.info("SL4J: Posting workshop - /workshop");
-        var model = convertToModel(workshopDto);
-        var workshop = service.createWorkshop(model);
+        try{
+            var model = convertToModel(workshopDto);
+            var workshop = service.createWorkshop(model);
 
-        return new ResponseEntity(convertToDto(workshop), HttpStatus.CREATED);
+            return new ResponseEntity(convertToDto(workshop), HttpStatus.CREATED);
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @PutMapping(value = "/{id}")
-    public void putWorkshop(@PathVariable("id") Long id, @Valid @RequestBody WorkshopDto workshopDto) throws ExpiredJwtException {
+    public void putWorkshop(@PathVariable("id") Long id, @Valid @RequestBody WorkshopDto workshopDto) throws ExpiredJwtException, NotFoundException {
         LOGGER.info("SL4J: Putting workshop - /workshop/{id}");
-        if(!id.equals(workshopDto.getId())) throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "id does not match."
-        );
+        try{
+            if(!id.equals(workshopDto.getId())) throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "id does not match."
+            );
 
-        var workshopModel = convertToModel(workshopDto);
-        service.updateWorkshop(id, workshopModel);
+            var workshopModel = convertToModel(workshopDto);
+            service.updateWorkshop(id, workshopModel);
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "Workshop not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 
     @DeleteMapping(value = "/{id}")
-    public HttpStatus deleteWorkshopById(@PathVariable("id") Long id) throws ExpiredJwtException {
+    public HttpStatus deleteWorkshopById(@PathVariable("id") Long id) throws ExpiredJwtException, NotFoundException{
         LOGGER.info("SL4J: Deleting workshop by id - /workshop/{id}");
-        service.deleteWorkshopById(id);
-        return HttpStatus.NO_CONTENT;
+        try{
+            service.deleteWorkshopById(id);
+            return HttpStatus.NO_CONTENT;
+        } catch (NotFoundException e) {
+            throw new NotFoundException(
+                    HttpStatus.NOT_FOUND,
+                    "Workshop not found."
+            );
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Expired JWT token."
+            );
+        }
     }
 }

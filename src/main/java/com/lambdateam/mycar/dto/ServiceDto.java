@@ -5,6 +5,7 @@ import com.lambdateam.mycar.model.WorkshopModel;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
@@ -18,6 +19,8 @@ public class ServiceDto {
     @NotNull(message = "Description is required")
     private String description;
     private String orderService;
+    @NotBlank(message = "Vehicle is required")
     private VehicleModel vehicle;
+    @NotBlank(message = "Workshop is required")
     private WorkshopModel workshop;
 }

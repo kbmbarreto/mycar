@@ -1,6 +1,5 @@
 package com.lambdateam.mycar.service;
 
-import com.lambdateam.mycar.exception.ExpiredJwtException;
 import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.ShoppingListModel;
 import com.lambdateam.mycar.repository.ShoppingListRepository;
@@ -15,75 +14,55 @@ public class ShoppingListService {
 
     private final ShoppingListRepository repository;
 
-    private ShoppingListModel findOrThrow(final Long id) throws ExpiredJwtException {
-        try{
-            return repository
-                    .findById(id)
-                    .orElseThrow(
-                            () -> new NotFoundException("The shopping list item " + id +" was not found.")
-                    );
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    private ShoppingListModel findOrThrow(final Long id) throws NotFoundException {
+        return repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("The shopping list item " + id +" was not found.")
+                );
     }
 
-    public List<ShoppingListModel> findAllShoppingListWithDetails() throws ExpiredJwtException {
+    public List<ShoppingListModel> findAllShoppingListWithDetails() throws NotFoundException {
         try{
             return repository.getShoppingListWithDetails();
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public Iterable<ShoppingListModel> findAllShoppingListItems() throws ExpiredJwtException {
+    public Iterable<ShoppingListModel> findAllShoppingListItems() throws NotFoundException {
         try{
             return repository.findAll();
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public ShoppingListModel findShoppingListItemById(Long id) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The shopping list item " + id +" was not found.");
-            return findOrThrow(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public ShoppingListModel findShoppingListItemById(Long id) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The shopping list item " + id +" was not found.");
+        return findOrThrow(id);
     }
 
-    public List<ShoppingListModel> dynamicSearchByComponent(String component) throws ExpiredJwtException {
+    public List<ShoppingListModel> dynamicSearchByComponent(String component) throws NotFoundException {
         try{
             return repository.dynamicSearchByComponent(component);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No results.");
         }
     }
 
-    public void deleteShoppingListItemById(Long id) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The shopping list item " + id +" was not found.");
-            repository.deleteById(id);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public void deleteShoppingListItemById(Long id) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The shopping list item " + id +" was not found.");
+        repository.deleteById(id);
     }
 
-    public ShoppingListModel createShoppingListItem(ShoppingListModel shoppingListItem) throws ExpiredJwtException {
-        try{
-            return repository.save(shoppingListItem);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public ShoppingListModel createShoppingListItem(ShoppingListModel shoppingListItem) {
+        return repository.save(shoppingListItem);
     }
 
-    public void updateShoppingListItem(Long id, ShoppingListModel shoppingListItem) throws ExpiredJwtException {
-        try{
-            if(!repository.existsById(id)) throw new NotFoundException("The shopping list item " + id +" was not found.");
-            findOrThrow(id);
-            repository.save(shoppingListItem);
-        } catch (Exception e) {
-            throw new ExpiredJwtException("You are not authorized to access this resource.");
-        }
+    public void updateShoppingListItem(Long id, ShoppingListModel shoppingListItem) throws NotFoundException {
+        if(!repository.existsById(id)) throw new NotFoundException("The shopping list item " + id +" was not found.");
+        findOrThrow(id);
+        repository.save(shoppingListItem);
     }
 }
