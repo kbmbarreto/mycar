@@ -8,7 +8,6 @@ import com.lambdateam.mycar.model.VehicleModel;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
@@ -19,17 +18,17 @@ public class MaintenancesDto {
 
     private long id;
     @NotNull(message = "KM is required")
-    private double km;
+    private int km;
     @NotNull(message = "Maintenance date is required")
     private Date maintenanceDate;
-    private double nextKm;
+    private int nextKm;
     private double amount;
-    @NotBlank(message = "Manufacturer is required")
+    @NotNull(message = "Description is required")
     private ManufacturerModel manufacturer;
-    @NotBlank(message = "Vehicle is required")
+    @NotNull(message = "Description is required")
     private VehicleModel vehicle;
-    @NotBlank(message = "Component is required")
+    @NotNull(message = "Description is required")
     private ComponentModel component;
-    @NotBlank(message = "Maintenance type is required")
+    @NotNull(message = "Description is required")
     private MaintenanceTypeModel maintenanceType;
 }

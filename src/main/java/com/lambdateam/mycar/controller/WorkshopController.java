@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +40,7 @@ public class WorkshopController {
     }
 
     @GetMapping
-    public List<WorkshopDto> getWorkshops(Pageable pageable) throws ExpiredJwtException, ResponseStatusException, NotFoundException {
+    public List<WorkshopDto> getWorkshops(@PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) throws ExpiredJwtException, ResponseStatusException, NotFoundException {
 
         LOGGER.info("SL4J: Getting workshop list - /workshop");
 

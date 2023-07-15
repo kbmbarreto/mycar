@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,7 +41,7 @@ public class ComponentController {
     }
 
     @GetMapping
-    public List<ComponentDto> getComponents(Pageable pageable) throws ExpiredJwtException, NotFoundException {
+    public List<ComponentDto> getComponents(@PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) throws ExpiredJwtException, NotFoundException {
         try{
             int toSkip = pageable.getPageSize() *
                     pageable.getPageNumber();

@@ -1,6 +1,5 @@
 package com.lambdateam.mycar.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,16 +22,16 @@ public class MaintenancesModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "km", columnDefinition = "DECIMAL(7,3)", nullable = false)
+    @Column(name = "km", nullable = false)
     @NotNull(message = "KM is required")
-    private double km;
+    private int km;
 
     @Column(name = "maintenance_date", nullable = false)
     @NotNull(message = "Maintenance date is required")
     private Date maintenanceDate;
 
-    @Column(name = "next_km", columnDefinition = "DECIMAL(7,3)")
-    private double nextKm;
+    @Column(name = "next_km")
+    private int nextKm;
 
     @Column(name = "amount", columnDefinition = "DECIMAL(7,2)")
     private double amount;

@@ -22,5 +22,5 @@ public class VehicleModel implements Serializable {
     public long id;
     @Column(name = "description", length = 45, columnDefinition = "VARCHAR(45)", nullable = false)
     @NotNull(message = "Description is required")
-    private String description;
+    public String description;
 }

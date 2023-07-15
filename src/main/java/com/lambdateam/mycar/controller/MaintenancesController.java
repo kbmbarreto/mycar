@@ -5,11 +5,14 @@ import com.lambdateam.mycar.exception.NotFoundException;
 import com.lambdateam.mycar.model.MaintenancesModel;
 import com.lambdateam.mycar.service.MaintenancesService;
 import lombok.AllArgsConstructor;
+import org.hibernate.exception.DataException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,7 +39,7 @@ public class MaintenancesController {
     private MaintenancesModel convertToModel(MaintenancesDto dto) { return mapper.map(dto, MaintenancesModel.class); }
 
     @GetMapping
-    public List<MaintenancesDto> getMaintenances(Pageable pageable) throws ExpiredJwtException, NotFoundException {
+    public List<MaintenancesDto> getMaintenances(@PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) throws ExpiredJwtException, NotFoundException {
         try{
             int toSkip = pageable.getPageSize() *
                     pageable.getPageNumber();
@@ -129,6 +132,12 @@ public class MaintenancesController {
         } catch (ExpiredJwtException e) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+        } catch (DataException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Data is not valid", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Data integrity violation", e);
         }
     }
 
