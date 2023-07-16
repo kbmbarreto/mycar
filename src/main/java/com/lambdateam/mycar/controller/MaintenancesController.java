@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/maintenances")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("maintenances")
 public class MaintenancesController {
 
     private final MaintenancesService service;

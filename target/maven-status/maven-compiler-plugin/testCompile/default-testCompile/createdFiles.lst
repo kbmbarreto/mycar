@@ -1,0 +1,12 @@
+com/lambdateam/mycar/MycarApplicationTests.class
+com/lambdateam/mycar/model/ComponentModelTest.class
+com/lambdateam/mycar/model/TrafficTicketModelTest.class
+com/lambdateam/mycar/model/ServiceModelTest.class
+com/lambdateam/mycar/model/MaintenancesModelTest.class
+com/lambdateam/mycar/model/VehicleModelTest.class
+com/lambdateam/mycar/model/MaintenanceTypeModelTest.class
+com/lambdateam/mycar/service/ComponentServiceTest.class
+com/lambdateam/mycar/model/ShoppingListModelTest.class
+com/lambdateam/mycar/model/UserModelTest.class
+com/lambdateam/mycar/model/ManufacturerModelTest.class
+com/lambdateam/mycar/model/WorkshopModelTest.class

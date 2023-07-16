@@ -1,0 +1,12 @@
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/MycarApplicationTests.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/TrafficTicketModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/ShoppingListModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/WorkshopModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/VehicleModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/ComponentModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/UserModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/ManufacturerModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/MaintenancesModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/MaintenanceTypeModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/model/ServiceModelTest.java
+/home/cskmacedo/Documents/git/projetos/mycar/src/test/java/com/lambdateam/mycar/service/ComponentServiceTest.java

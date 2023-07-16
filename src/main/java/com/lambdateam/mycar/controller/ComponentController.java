@@ -7,7 +7,6 @@ import com.lambdateam.mycar.service.ComponentService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/component")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("Component")
 public class ComponentController {
 
     private final ComponentService service;

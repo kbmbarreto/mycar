@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,6 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping(value = "/service")
 @PreAuthorize("isAuthenticated()")
-@RedisHash("Service")
 public class ServiceController {
 
     private final ServiceService serviceService;
