@@ -18,18 +18,18 @@ pipeline {
             }
         }
 
-        stage('Cleaning project') {
+        stage('Unit tests') {
             steps {
                 withMaven(maven: 'Maven3') {
-                    sh "mvn clean"
+                    sh 'mvn test'
                 }
             }
         }
 
-        stage('Compile project') {
+        stage('Cleaning project') {
             steps {
                 withMaven(maven: 'Maven3') {
-                    sh 'mvn clean install -DskipTests'
+                    sh "mvn clean"
                 }
             }
         }
