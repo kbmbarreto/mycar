@@ -114,15 +114,19 @@ public class ServiceController {
 
     @PostMapping
     public ResponseEntity<ServiceDto> postService(@Valid @RequestBody ServiceDto serviceDto) throws ExpiredJwtException {
-        LOGGER.info("SL4J: Creating service - /service");
 
         try {
             var model = convertToModel(serviceDto);
             var service = serviceService.createService(model);
+
+            LOGGER.info("SL4J: Creating service - /service");
+
             return new ResponseEntity(convertToDto(service), HttpStatus.CREATED);
         } catch (ExpiredJwtException e) {
             throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "JWT token has expired", e);
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid token."
+            );
         }
     }
 
